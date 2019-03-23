@@ -1,7 +1,7 @@
 import socketserver
 import paramiko
-from .auth import Authorization
-from .server_interface import SFTPServerInterface
+from auth import Authorization
+from server_interface import SFTPServerInterface
 
 class AnylinkServer(socketserver.TCPServer):
 
