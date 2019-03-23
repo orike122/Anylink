@@ -1,3 +1,4 @@
+print("importing...")
 from conf import Configuration
 from server import AnylinkServer
 
