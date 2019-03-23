@@ -6,6 +6,7 @@ from server_interface import SFTPServerInterface
 class AnylinkServer(socketserver.TCPServer):
 
     def __init__(self,addr,config):
+        print(addr)
         super().__init__(self,addr,SFTPHandler)
         #TODO fix config
         self.users = config.users
