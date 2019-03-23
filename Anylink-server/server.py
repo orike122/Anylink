@@ -26,7 +26,7 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         self.set_subsystem_handlers()
 
     def handle(self):
-        server_interface = Authorization(self.server.users, self._set_auth_user())
+        server_interface = Authorization(self.server.users, self._set_auth_user)
 
         channel = self.transport.accept(self.TIMEOUT)
         if not channel:
