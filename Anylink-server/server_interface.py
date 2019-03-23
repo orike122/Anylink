@@ -25,7 +25,7 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         assert (os.path.commonprefix((absolute_base_path, lp)) == absolute_base_path)
         return lp
 
-    def ls_folder(self,sftp_path):
+    def list_folder(self,sftp_path):
         local_path = self._local_path(sftp_path)
         retval = []
         for fname in os.listdir(local_path):
