@@ -1,5 +1,6 @@
 import socketserver
 import paramiko
+from .auth import Authorization
 
 class AnylinkServer(socketserver.TCPServer):
 
@@ -22,8 +23,12 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         self.set_subsystem_handlers()
 
     def handle(self):
-        #TODO add authorization as server iface
-        server_interface = None
+        server_interface = Authorization(self.server.users, self._set_auth_user())
+
+        channel = self.transport.accept(self.TIMEOUT)
+        if not channel:
+            raise Exception("session channel not opened (auth failed?)")
+        self.transport.join()
 
 
     def _set_auth_user(self,user):
