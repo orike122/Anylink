@@ -1,5 +1,6 @@
 
 import paramiko
+import crypt
 class Authorization(paramiko.ServerInterface):
 
     users = None
@@ -9,10 +10,20 @@ class Authorization(paramiko.ServerInterface):
         self._set_auth_method = set_auth_method
 
     def get_allowed_auths(self, username):
-        return "publickey"
+        return "publickey,password"
 
     def check_auth_none(self, username):
         return paramiko.AUTH_FAILED
+
+    def check_auth_password(self, username, password):
+        if username in self.users:
+            pwhash = self.users[username].password_hash
+            if crypt.crypt(password, pwhash) != pwhash:
+                return paramiko.AUTH_FAILED
+        else:
+            return paramiko.AUTH_FAILED
+        self._set_auth_method(self.users[username])
+        return paramiko.AUTH_SUCCESSFUL
 
     def check_auth_publickey(self, username, key):
         if username in self.users:
