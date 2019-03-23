@@ -1,6 +1,7 @@
 import socketserver
 import paramiko
 from .auth import Authorization
+from .server_interface import SFTPServerInterface
 
 class AnylinkServer(socketserver.TCPServer):
 
@@ -55,6 +56,5 @@ class SFTPHandler(socketserver.BaseRequestHandler):
             self.transport.add_server_key(key)
 
     def set_subsystem_handlers(self):
-        pass
-        #TODO complete
-        #self.transport.set_subsystem_handler('sftp', paramiko.SFTPServer,sftp_si = SFTP)
+        self.transport.set_subsystem_handler('sftp', paramiko.SFTPServer,
+            sftp_si = SFTPServerInterface, getUserFunc = self._get_auth_user)
