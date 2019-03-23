@@ -49,7 +49,7 @@ class SFTPHandler(socketserver.BaseRequestHandler):
     def set_security_options(self):
         sec_options = self.transport.get_security_options()
 
-        sec_options.digests = ('hmac-sha1')
+        sec_options.digests = ('hmac-sha1',)
 
         sec_options.compression = ('zlib@openssh.com','none')
 
