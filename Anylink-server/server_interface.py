@@ -46,8 +46,6 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
     def open(self, sftp_path, flags, attr):
         local_path = self._local_path(sftp_path)
         print(local_path)
-        if (flags & os.O_WRONLY) or (flags & os.O_RDWR):
-            return paramiko.SFTP_PERMISSION_DENIED
         handle = paramiko.SFTPHandle()
         handle.readfile = open(local_path, "rb")
         return handle
