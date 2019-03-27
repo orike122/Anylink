@@ -50,3 +50,84 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         handle = paramiko.SFTPHandle()
         handle.readfile = open(local_path, "rb")
         return handle
+
+    def remove(self, path):
+        path = self._local_path(path)
+        try:
+            os.remove(path)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        return paramiko.SFTP_OK
+
+
+    def rename(self, oldpath, newpath):
+        oldpath = self._local_path(oldpath)
+        newpath = self._local_path(newpath)
+        try:
+            os.rename(oldpath, newpath)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        return paramiko.SFTP_OK
+
+    def mkdir(self, path, attr):
+        path = self._local_path(path)
+        try:
+            os.mkdir(path)
+            if attr is not None:
+                paramiko.SFTPServer.set_file_attr(path, attr)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        return paramiko.SFTP_OK
+
+    def rmdir(self, path):
+        path = self._local_path(path)
+        try:
+            os.rmdir(path)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        return paramiko.SFTP_OK
+
+    def chattr(self, path, attr):
+        path = self._local_path(path)
+        try:
+            paramiko.SFTPServer.set_file_attr(path, attr)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        return paramiko.SFTP_OK
+
+    def symlink(self, target_path, path):
+        path = self._local_path(path)
+        if (len(target_path) > 0) and (target_path[0] == '/'):
+            # absolute symlink
+            target_path = os.path.join(self.ROOT, target_path[1:])
+            if target_path[:2] == '//':
+                # bug in os.path.join
+                target_path = target_path[1:]
+        else:
+            # compute relative to path
+            abspath = os.path.join(os.path.dirname(path), target_path)
+            if abspath[:len(self.ROOT)] != self.ROOT:
+                # this symlink isn't going to work anyway -- just break it immediately
+                target_path = '<error>'
+        try:
+            os.symlink(target_path, path)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        return paramiko.SFTP_OK
+
+    def readlink(self, path):
+        path = self._local_path(path)
+        try:
+            symlink = os.readlink(path)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        # if it's absolute, remove the root
+        if os.path.isabs(symlink):
+            if symlink[:len(self.ROOT)] == self.ROOT:
+                symlink = symlink[len(self.ROOT):]
+                if (len(symlink) == 0) or (symlink[0] != '/'):
+                    symlink = '/' + symlink
+            else:
+                symlink = '<error>'
+
+        return symlink
