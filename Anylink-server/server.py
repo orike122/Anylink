@@ -60,4 +60,4 @@ class SFTPHandler(socketserver.BaseRequestHandler):
 
     def set_subsystem_handlers(self):
         self.transport.set_subsystem_handler('sftp', paramiko.SFTPServer,
-            sftp_si = SFTPServerInterface, getUserFunc = self._get_auth_user)
+            sftp_si = SFTPServerInterface, get_user_method = self._get_auth_user)
