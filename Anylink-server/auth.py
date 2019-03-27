@@ -17,11 +17,15 @@ class Authorization(paramiko.ServerInterface):
 
     def check_auth_password(self, username, password):
         if username in self.users:
+            print("user in records...")
             pwhash = self.users[username].password_hash
             if crypt.crypt(password, pwhash) != pwhash:
+                print("user passwd is wrong...")
                 return paramiko.AUTH_FAILED
         else:
+            print("user not in records...")
             return paramiko.AUTH_FAILED
+        print("user auth successful...")
         self._set_auth_method(self.users[username])
         return paramiko.AUTH_SUCCESSFUL
 
