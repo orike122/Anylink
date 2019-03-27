@@ -47,7 +47,7 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         local_path = self._local_path(sftp_path)
         print(local_path)
         handle = paramiko.SFTPHandle()
-        handle.readfile = open(local_path, "rb")
+        handle.readfile = open(local_path, "rb+")
         return handle
 
     def remove(self, path):
