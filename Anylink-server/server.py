@@ -4,11 +4,10 @@ from auth import Authorization
 from server_interface import SFTPServerInterface
 
 class AnylinkServer(socketserver.TCPServer):
-
+    allow_reuse_address = True
     def __init__(self,addr,config):
         print("super initialize server...")
         super().__init__(addr,SFTPHandler)
-        self.allow_reuse_address =True
 
         #TODO fix config
         self.users = config.users
