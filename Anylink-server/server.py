@@ -8,6 +8,7 @@ class AnylinkServer(socketserver.TCPServer):
     def __init__(self,addr,config):
         print("super initialize server...")
         super().__init__(addr,SFTPHandler)
+        self.allow_reuse_address =True
 
         #TODO fix config
         self.users = config.users
