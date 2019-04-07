@@ -42,7 +42,7 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         local_path = self._local_path(sftp_path)
         fname = os.path.basename(local_path)
         return paramiko.SFTPAttributes.from_stat(os.lstat(local_path), fname)
-
+    """
     def open(self, sftp_path, flags, attr):
         local_path = self._local_path(sftp_path)
         print(local_path)
@@ -51,4 +51,44 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         handle.writefile = open(local_path, "wb")
         print("open....")
         return handle
+    """
 
+    def open(self, path, flags, attr):
+        path = self._local_path(path)
+        try:
+            binary_flag = getattr(os, 'O_BINARY',  0)
+            flags |= binary_flag
+            mode = getattr(attr, 'st_mode', None)
+            if mode is not None:
+                fd = os.open(path, flags, mode)
+            else:
+                # os.open() defaults to 0777 which is
+                # an odd default mode for files
+                fd = os.open(path, flags, 0o666)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        if (flags & os.O_CREAT) and (attr is not None):
+            attr._flags &= ~attr.FLAG_PERMISSIONS
+            paramiko.SFTPServer.set_file_attr(path, attr)
+        if flags & os.O_WRONLY:
+            if flags & os.O_APPEND:
+                fstr = 'ab'
+            else:
+                fstr = 'wb'
+        elif flags & os.O_RDWR:
+            if flags & os.O_APPEND:
+                fstr = 'a+b'
+            else:
+                fstr = 'r+b'
+        else:
+            # O_RDONLY (== 0)
+            fstr = 'rb'
+        try:
+            f = os.fdopen(fd, fstr)
+        except OSError as e:
+            return paramiko.SFTPServer.convert_errno(e.errno)
+        fobj = paramiko.StubSFTPHandle(flags)
+        fobj.filename = path
+        fobj.readfile = f
+        fobj.writefile = f
+        return fobj
