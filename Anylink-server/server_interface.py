@@ -66,6 +66,7 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
                 # an odd default mode for files
                 fd = os.open(path, flags, 0o666)
         except OSError as e:
+            print(e)
             return paramiko.SFTPServer.convert_errno(e.errno)
         if (flags & os.O_CREAT) and (attr is not None):
             attr._flags &= ~attr.FLAG_PERMISSIONS
@@ -86,9 +87,11 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         try:
             f = os.fdopen(fd, fstr)
         except OSError as e:
+            print(e)
             return paramiko.SFTPServer.convert_errno(e.errno)
         fobj = paramiko.StubSFTPHandle(flags)
         fobj.filename = path
         fobj.readfile = f
         fobj.writefile = f
+        print("yay....")
         return fobj
