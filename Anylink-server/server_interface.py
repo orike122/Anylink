@@ -47,9 +47,15 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
     def open(self, sftp_path, flags, attr):
         local_path = self._local_path(sftp_path)
         print(local_path)
-        handle = paramiko.SFTPHandle()
+        try:
+            handle = paramiko.SFTPHandle()
+        except Exception as e:
+            print("1: "+str(e))
         #handle.readfile = open(local_path, flags, attr)
-        handle.writefile = open(local_path, flags, attr)
+        try:
+            handle.writefile = open(local_path, flags, attr)
+        except Exception as e:
+            print("2: " + str(e))
         print("open....")
         return handle
 
