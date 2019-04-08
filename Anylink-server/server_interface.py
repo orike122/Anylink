@@ -51,19 +51,17 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         readfile = None
         writefile = None
         print(flags)
-        if flags & os.O_RDONLY:
-            print("read")
-            readfile = open(local_path,"rb")
-
         if flags & os.O_WRONLY:
             print("write")
             writefile = open(local_path, "wb")
 
-        if flags & os.O_RDWR:
+        elif flags & os.O_RDWR:
             print("readwrite")
             readfile = open(local_path, "rb")
             print("readwrite2")
             writefile = open(local_path, "wb")
+        else:
+            readfile = open(local_path,"rb")
 
         handle.readfile = readfile
         handle.writefile = writefile
