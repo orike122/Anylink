@@ -48,8 +48,8 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         local_path = self._local_path(sftp_path)
         print(local_path)
         handle = paramiko.SFTPHandle()
-        handle.readfile = open(local_path, "rb")
-        handle.writefile = open(local_path, "wb")
+        #handle.readfile = open(local_path, flags, attr)
+        handle.writefile = open(local_path, flags, attr)
         print("open....")
         return handle
-    
+
