@@ -50,6 +50,7 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         handle = paramiko.SFTPHandle()
         readfile = None
         writefile = None
+        print(flags)
         if flags & os.O_RDONLY:
             print("read")
             readfile = open(local_path,"rb")
