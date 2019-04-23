@@ -16,7 +16,7 @@ class Configuration():
             listen_port = json_handle[self.conf]["listen_port"]
             self.bind_addr = ("0.0.0.0",listen_port)
             host_key_path = json_handle[self.conf]["host_key_path"]
-            self.host_key = paramiko.RSAKey.from_private_key_file(filename=host_key_path)
+            self.host_keys = [paramiko.RSAKey.from_private_key_file(filename=host_key_path)]
             self.database = None
             #TODO: integrate with database
 
