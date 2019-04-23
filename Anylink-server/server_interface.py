@@ -7,7 +7,7 @@ import server
 class SFTPServerInterface(paramiko.SFTPServerInterface):
 
     def __init__(self, server,get_user_method):
-        self._base_dir = get_user_method().root_path
+        self._base_dir = "/{email_hash}/ssh/authorized_keys".format(email_hash = get_user_method()["email_hash"])
 
     def _local_path(self, sftp_path):
         if sys.platform == 'win32':

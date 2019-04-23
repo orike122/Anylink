@@ -5,7 +5,7 @@ import hashlib
 class Database():
     #magic strings
     insert = "INSERT INTO ? (email,password_hash,email_hash) VALUES (?,?)"
-    select = "SELECT * FROM ? WHERE email_hash=?"
+    select = "SELECT * FROM ? WHERE email=?"
 
     def __init__(self, database_path, default_table = None):
         self.database_path = database_path
@@ -25,14 +25,13 @@ class Database():
         email_hash = hashlib.sha256(email).hexdigest()
         cursor.execute(self.insert,current_table,(email,password_hash,email_hash))
         cursor.close()
-        
-    def search_database(self,email_hash,table = None):
+    def search_database(self,email,table = None):
         if table is not None and isinstance(table, str):
             current_table = table
         else:
             current_table = self._default_table
         cursor = self.database.cursor()
-        cursor.execute(self.select,current_table,email_hash)
+        cursor.execute(self.select,current_table,email)
         user = cursor.fetchall()
         cursor.close()
         return user

@@ -10,7 +10,6 @@ class AnylinkServer(socketserver.TCPServer):
         self.allow_reuse_address = True
         super().__init__(addr,SFTPHandler)
 
-        #TODO fix config
         self.database = config.database
         self.host_keys = config.host_keys
 
