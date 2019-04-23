@@ -1,5 +1,5 @@
 import json
-
+from database import Database
 import paramiko
 
 
@@ -17,8 +17,7 @@ class Configuration():
             self.bind_addr = ("0.0.0.0",listen_port)
             host_key_path = json_handle[self.conf]["host_key_path"]
             self.host_keys = [paramiko.RSAKey.from_private_key_file(filename=host_key_path)]
-            self.database = None
-            #TODO: integrate with database
+            self.database = Database(json_handle[self.conf]["database_path"])
 
 
 
