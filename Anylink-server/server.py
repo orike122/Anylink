@@ -11,7 +11,7 @@ class AnylinkServer(socketserver.TCPServer):
         super().__init__(addr,SFTPHandler)
 
         #TODO fix config
-        self.users = config.users
+        self.database = config.database
         self.host_keys = config.host_keys
 
 
@@ -27,7 +27,7 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         self.set_subsystem_handlers()
 
     def handle(self):
-        server_interface = Authorization(self.server.users, self._set_auth_user)
+        server_interface = Authorization(self.server.database, self._set_auth_user)
         self.transport.start_server(server=server_interface)
         channel = self.transport.accept(self.TIMEOUT)
         print(channel)
