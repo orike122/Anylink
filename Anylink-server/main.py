@@ -1,13 +1,13 @@
 print("importing...")
-from conf import Configuration
+from config import Configuration
 from server import AnylinkServer
 
 def main():
     print("config...")
-    config = Configuration("config.ini")
+    config = Configuration("/home/orikeidar01/config.json")
     print("initialize server...")
     AnylinkServer.allow_reuse_address = True
-    server = AnylinkServer(config.bind_address, config = config)
+    server = AnylinkServer(config.bind_addr, config = config)
     print("serving...")
     server.serve_forever()
 
