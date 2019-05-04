@@ -34,5 +34,5 @@ class RequestsManager():
     def send_file(self,user,file_path):
         self.channels[user].send(self.SEND_FILE)
         size = len(file_path)*8
-        self.channels[user].send(size)
+        self.channels[user].send(str(size))
         self.channels[user].send(file_path)
