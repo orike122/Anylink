@@ -40,9 +40,12 @@ class Client():
     def _control_recv(self,size):
         data = self.control_chan.recv(size)
         return data.decode("utf-8")
-    def connect(self,email,password):
+    def connect(self,email,password=None,key=None):
         self.status = self.WAITING_FOR_SFTP_CONNECTION
-        self.transport.connect(username=email,password=password)
+        if key is not None:
+            self.transport.connect(username=email,key=key)
+        else:
+            self.transport.connect(username=email,password=password)
         self.sftp_client = paramiko.SFTPClient.from_transport(self.transport)
         self.status = self.WAITING_FOR_CONTROL_CONNECTION
         self.control_chan = self.transport.open_session()
