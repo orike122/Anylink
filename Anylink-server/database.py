@@ -25,6 +25,7 @@ class Database():
 
         email_hash = hashlib.sha256(email.encode("utf-8")).hexdigest()
         cursor.execute(insert,(email,password_hash,email_hash))
+        self.database.commit()
         cursor.close()
     def search_database(self,email,table = None):
         if table is not None and isinstance(table, str):
