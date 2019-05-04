@@ -40,7 +40,7 @@ class Client():
         return data.decode("utf-8")
     def connect(self,email,password):
         self.status = self.WAITING_FOR_SFTP_CONNECTION
-        self.transport.connect(username=self.email,password=password)
+        self.transport.connect(username=email,password=password)
         self.sftp_client = paramiko.SFTPClient.from_transport(self.transport)
         self.status = self.WAITING_FOR_CONTROL_CONNECTION
         self.control_chan = self.transport.open_session()
