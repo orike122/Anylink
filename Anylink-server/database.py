@@ -4,7 +4,7 @@ import hashlib
 
 class Database():
     #magic strings
-    insert = "INSERT INTO ? (email,password_hash,email_hash) VALUES (?,?)"
+    insert = "INSERT INTO ? (email,password_hash,email_hash) VALUES (?,?,?)"
     select = "SELECT * FROM ? WHERE email=?"
 
     def __init__(self, database_path, default_table = None):
