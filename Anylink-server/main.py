@@ -1,6 +1,7 @@
 print("importing...")
 from config import Configuration
 from server import AnylinkServer
+import threading
 
 def main():
     print("config...")
@@ -9,7 +10,9 @@ def main():
     AnylinkServer.allow_reuse_address = True
     server = AnylinkServer(config.bind_addr, config = config)
     print("serving...")
-    server.serve_forever()
+    sftp_thread = threading.Thread(target=server.serve_forever)
+    sftp_thread.start()
+    
 
 if __name__ == "__main__":
     main()
