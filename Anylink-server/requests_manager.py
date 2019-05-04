@@ -11,7 +11,7 @@ class RequestsManager():
         self.ready = {}
     def _create_channel(self,user):
         self.channels[user] = self.handler_class.users[user].accept()
-        data = self.channels[user].recv[40]
+        data = self.channels[user].recv(40)
         data = data.decode("utf-8")
         print(data)
         if data == self.READY:
