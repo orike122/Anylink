@@ -28,7 +28,7 @@ class Client():
     WAITING_FOR_SFTP_CONNECTION = 1
     WAITING_FOR_CONTROL_CONNECTION = 2
     CONNECTED = 3
-    def __init__(self,server_addr,auth_key_path):
+    def __init__(self,server_addr,auth_key_path=None):
         self.transport = paramiko.Transport((server_addr))
         self.status = self.NOT_CONNECTED
         self.auth_key_path = auth_key_path
@@ -40,9 +40,10 @@ class Client():
     def _control_recv(self,size):
         data = self.control_chan.recv(size)
         return data.decode("utf-8")
-    def connect(self,email,password=None,key=None):
+    def connect(self,email,password=None):
         self.status = self.WAITING_FOR_SFTP_CONNECTION
-        if key is not None:
+        if self.auth_key_path is not None:
+            key = paramiko.RSAKey.from_private_key_file(filename=self.auth_key_path)
             self.transport.connect(username=email,key=key)
         else:
             self.transport.connect(username=email,password=password)

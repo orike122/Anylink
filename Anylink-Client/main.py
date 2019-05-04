@@ -16,10 +16,12 @@ def main():
         print("begin ssh-key generation process.........")
         os.system("ssh-keygen")
         auth_keys_path = input("insert path of public ssh key: ")
+        client = Client((ip, port))
+        email = input("enter email:")
+        passwd = input("enter email:")
+        client.connect("testusr@gmail.com", "abc")
 
-    client = Client((ip,port))
 
-    client.connect("testusr@gmail.com", "abc")
     client.start_client()
 if __name__ == "__main__":
     main()
