@@ -29,6 +29,7 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         server_interface = Authorization(self.server.database, self._set_auth_user)
         self.transport.start_server(server=server_interface)
         channel = self.transport.accept(self.TIMEOUT)
+        channel.send("hi")
         print(channel)
         if channel is None:
             raise Exception("session channel not opened (auth failed?)")
