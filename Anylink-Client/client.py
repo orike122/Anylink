@@ -37,7 +37,7 @@ class Client():
         return len(b)*8
     def _control_recv(self,size):
         data = self.control_chan.recv(size)
-        return data
+        return data.decode("utf-8")
     def connect(self,email,password):
         self.status = self.WAITING_FOR_SFTP_CONNECTION
         self.transport.connect(username=self.email,password=password)
@@ -66,8 +66,8 @@ class Client():
 
     def recv_with_size(self):
         size = self.control_chan.recv(1024)
-        print(size)
-        return self.control_chan.recv(size)
+        print(size.decode("utf-8"))
+        return self.control_chan.recv(int(size))
 
     def send_key(self):
         pass
