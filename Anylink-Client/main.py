@@ -23,7 +23,7 @@ def main():
 
         client = Client((ip, port))
         email = input("enter email:")
-        passwd = input("enter email:")
+        passwd = input("enter password:")
         client.connect(email,passwd)
     else:
         print("welcome again............")
