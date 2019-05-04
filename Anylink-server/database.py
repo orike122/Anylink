@@ -4,8 +4,8 @@ import hashlib
 
 class Database():
     #magic strings
-    insert = "INSERT INTO ? (email,password_hash,email_hash) VALUES (?,?,?)"
-    select = "SELECT * FROM ? WHERE email=?"
+    insert = "INSERT INTO {table} (email,password_hash,email_hash) VALUES (?,?,?)"
+    select = "SELECT * FROM {table} WHERE email=?"
 
     def __init__(self, database_path, default_table = None):
         self.database_path = database_path
@@ -21,9 +21,10 @@ class Database():
         else:
             current_table = self._default_table
         cursor = self.database.cursor()
+        insert = self.insert.format(table=current_table)
 
         email_hash = hashlib.sha256(email.encode("utf-8")).hexdigest()
-        cursor.execute(self.insert,(current_table,email,password_hash,email_hash))
+        cursor.execute(insert,(current_table,email,password_hash,email_hash))
         cursor.close()
     def search_database(self,email,table = None):
         if table is not None and isinstance(table, str):
@@ -31,7 +32,8 @@ class Database():
         else:
             current_table = self._default_table
         cursor = self.database.cursor()
-        cursor.execute(self.select,(current_table,email))
+        select = self.select.format(table=current_table)
+        cursor.execute(select,(current_table,email))
         user = cursor.fetchall()
         cursor.close()
         return user
