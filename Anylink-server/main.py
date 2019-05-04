@@ -16,7 +16,8 @@ def main():
     sftp_thread.start()
     time.sleep(10)
     testusr=RequestsManager.users["testusr@gmail.com"]
-    testusr.accept()
+    chan = testusr.accept()
+    print(chan)
 
 
 if __name__ == "__main__":
