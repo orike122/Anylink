@@ -5,6 +5,7 @@ protocol:
 Client -> Server: "ready"
 Client -> Server: "confready"
 Server -> Client: "sendkey"
+Server -> Client: "keysent"
 Client -> Server: <<key>>
 Server -> Client: "sendfile"
 Server -> Client: <<size>>
@@ -27,9 +28,10 @@ class Client():
     WAITING_FOR_SFTP_CONNECTION = 1
     WAITING_FOR_CONTROL_CONNECTION = 2
     CONNECTED = 3
-    def __init__(self,server_addr):
+    def __init__(self,server_addr,auth_key_path):
         self.transport = paramiko.Transport((server_addr))
         self.status = self.NOT_CONNECTED
+        self.auth_key_path = auth_key_path
     def start_client(self):
         while True:
             self.wait_for_request()
@@ -70,7 +72,8 @@ class Client():
         return self.control_chan.recv(int(size))
 
     def send_key(self):
-        pass
+        self.sftp_client.put(self.auth_key_path, "/" + self.auth_key_path.split("/")[-1])
+        self.control_chan.send("filesent")
     def send_tree(self):
         pass
     def send_file(self):
