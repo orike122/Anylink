@@ -17,6 +17,7 @@ def main():
     time.sleep(10)
     testusr=RequestsManager.users["testusr@gmail.com"]
     chan = testusr.accept()
+    chan.send("hiii")
     print(chan)
 
 
