@@ -2,6 +2,7 @@ import socketserver
 import paramiko
 from auth import Authorization
 from server_interface import SFTPServerInterface
+from requests_manager import RequestsManager
 
 class AnylinkServer(socketserver.TCPServer):
 
@@ -29,9 +30,7 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         server_interface = Authorization(self.server.database, self._set_auth_user)
         self.transport.start_server(server=server_interface)
         channel = self.transport.accept(self.TIMEOUT)
-        print("user: "+self._get_auth_user()["email"])
-        print(type(self._get_auth_user()["email"]))
-        print(type(self._get_auth_user()))
+        RequestsManager.add_transport(self.transport,self._get_auth_user())
         print(channel)
         if channel is None:
             raise Exception("session channel not opened (auth failed?)")

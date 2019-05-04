@@ -1,7 +1,7 @@
 
 class RequestsManager():
-    def __init__(self):
-        pass
+    users ={}
+
     @staticmethod
-    def add_transport(transport):
-        pass
+    def add_transport(transport,user):
+        RequestsManager.users[user["email"]] = transport
