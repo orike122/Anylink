@@ -22,6 +22,7 @@ class RequestsManager():
             if not os.path.isfile("/{email_hash}/ssh/authorized_keys".format(email_hash = email_hash)):
                 self.channels[user].send(self.SEND_KEY)
                 data = self.channels[user].recv(56)
+                print(data)
                 if data == self.KEY_SENT:
                     with open("/{email_hash}/storage/key".format(email_hash = email_hash),"r") as f:
                         raw_key = f.read()
