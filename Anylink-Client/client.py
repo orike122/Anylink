@@ -1,4 +1,5 @@
 import paramiko
+
 """
 protocol:
 Client -> Server: "ready"
@@ -30,7 +31,8 @@ class Client():
         self.transport = paramiko.Transport((server_addr))
         self.status = self.NOT_CONNECTED
     def start_client(self):
-        pass
+        while True:
+            self.wait_for_request()
     def _size(self,b):
         return len(b)*8
     def _control_recv(self,size):
@@ -57,12 +59,22 @@ class Client():
             self.send_tree()
         elif data == self.SEND_FILE:
             self.send_file()
+    def send_with_size(self,s):
+        size = self._size(s)
+        self.control_chan.send(size)
+        self.control_chan.send(s)
+
+    def recv_with_size(self):
+        size = self.control_chan.recv(1024)
+        print(size)
+        return self.control_chan.recv(size)
 
     def send_key(self):
         pass
     def send_tree(self):
         pass
     def send_file(self):
-        pass
+        path = self.recv_with_size()
+        self.sftp_client.put(path,path.split("/")[-1])
 
 
