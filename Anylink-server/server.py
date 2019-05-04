@@ -18,7 +18,7 @@ class AnylinkServer(socketserver.TCPServer):
 class SFTPHandler(socketserver.BaseRequestHandler):
 
     TIMEOUT = 120
-
+    users  = {}
     def setup(self):
         self.transport = self.make_transport(self.request)
         self.load_server_moduli()
@@ -30,7 +30,7 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         server_interface = Authorization(self.server.database, self._set_auth_user)
         self.transport.start_server(server=server_interface)
         channel = self.transport.accept(self.TIMEOUT)
-        RequestsManager.add_transport(self.transport,self._get_auth_user())
+        SFTPHandler.users[self._get_auth_user()["email"]] = self.transport
         print(channel)
         if channel is None:
             raise Exception("session channel not opened (auth failed?)")
