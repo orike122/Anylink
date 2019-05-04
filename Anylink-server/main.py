@@ -35,7 +35,7 @@ def main():
             user = input("enter user email: ")
             requests_manager.get_channel(user)
             path = input("enter file path: ")
-            requests_manager.send_file(path)
+            requests_manager.send_file(user,path)
 
 
 
