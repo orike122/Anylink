@@ -9,7 +9,7 @@ class AccountManager():
     def _create_dir_structure(email_hash):
         main_dir = "/{email_hash}".format(email_hash=email_hash)
         ssh_dir = "/{email_hash}/ssh".format(email_hash=email_hash)
-        storage_dir = "/{email_hash}/ssh".format(email_hash=email_hash)
+        storage_dir = "/{email_hash}/storage".format(email_hash=email_hash)
 
         os.mkdir(main_dir)
         os.mkdir(ssh_dir)
