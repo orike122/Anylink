@@ -36,7 +36,6 @@ class SFTPHandler(socketserver.BaseRequestHandler):
             raise Exception("session channel not opened (auth failed?)")
         self.transport.join()
 
-
     def _set_auth_user(self,user):
         self._auth_user = user
 

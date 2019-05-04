@@ -10,7 +10,7 @@ class RequestsManager():
         if user in self.channels:
             return self.channels[user]
         elif user in self.handler_class.users:
-            self._create_channel()
+            self._create_channel(user)
             return self.channels[user]
         return None
 
