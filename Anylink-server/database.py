@@ -36,12 +36,15 @@ class Database():
         select = self.select.format(table=current_table)
         cursor.execute(select,(email,))
         user = cursor.fetchone()
-        res_email = user[0]
-        res_passwh = user[1]
-        res_emailh = user[2]
-        user_dict = {"email":res_email,"password_hash":res_passwh,"email_hash":res_emailh}
-        cursor.close()
-        return user_dict
+        if user is not None:
+            res_email = user[0]
+            res_passwh = user[1]
+            res_emailh = user[2]
+            user_dict = {"email":res_email,"password_hash":res_passwh,"email_hash":res_emailh}
+            cursor.close()
+            return user_dict
+        else:
+            return user
 
 
 
