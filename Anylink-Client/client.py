@@ -75,6 +75,6 @@ class Client():
         pass
     def send_file(self):
         path = self.recv_with_size()
-        self.sftp_client.put(path,path.split("/")[-1])
+        self.sftp_client.put(path,"/"+path.split("/")[-1])
 
 
