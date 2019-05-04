@@ -22,7 +22,7 @@ class Database():
             current_table = self._default_table
         cursor = self.database.cursor()
 
-        email_hash = hashlib.sha256(email).hexdigest()
+        email_hash = hashlib.sha256(email.encode("utf-8")).hexdigest()
         cursor.execute(self.insert,current_table,(email,password_hash,email_hash))
         cursor.close()
     def search_database(self,email,table = None):
