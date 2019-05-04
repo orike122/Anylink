@@ -10,7 +10,7 @@ class Database():
     def __init__(self, database_path, default_table = None):
         self.database_path = database_path
         self._default_table = default_table
-        self.database = sqlite3.connect(self.database_path)
+        self.database = sqlite3.connect(self.database_path,check_same_thread=False)
 
     def set_default_table(self,default_table):
         self._default_table = default_table
