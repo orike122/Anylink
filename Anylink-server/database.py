@@ -35,9 +35,13 @@ class Database():
         cursor = self.database.cursor()
         select = self.select.format(table=current_table)
         cursor.execute(select,(email,))
-        user = cursor.fetchall()
+        user = cursor.fetchone()
+        res_email = user[0]
+        res_passwh = user[1]
+        res_emailh = user[2]
+        user_dict = {"email":res_email,"password_hash":res_passwh,"email_hash":res_emailh}
         cursor.close()
-        return user
+        return user_dict
 
 
 
