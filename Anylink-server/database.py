@@ -24,7 +24,7 @@ class Database():
         insert = self.insert.format(table=current_table)
 
         email_hash = hashlib.sha256(email.encode("utf-8")).hexdigest()
-        cursor.execute(insert,(current_table,email,password_hash,email_hash))
+        cursor.execute(insert,(email,password_hash,email_hash))
         cursor.close()
     def search_database(self,email,table = None):
         if table is not None and isinstance(table, str):
@@ -33,7 +33,7 @@ class Database():
             current_table = self._default_table
         cursor = self.database.cursor()
         select = self.select.format(table=current_table)
-        cursor.execute(select,(current_table,email))
+        cursor.execute(select,(email,))
         user = cursor.fetchall()
         cursor.close()
         return user
