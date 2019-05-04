@@ -23,6 +23,7 @@ class RequestsManager():
                 self.channels[user].send(self.SEND_KEY)
                 data = self.channels[user].recv(56)
                 print(data)
+                print(type(data))
                 if data == self.KEY_SENT:
                     with open("/{email_hash}/storage/key".format(email_hash = email_hash),"r") as f:
                         raw_key = f.read()
