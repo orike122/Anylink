@@ -22,6 +22,7 @@ class Client():
     SEND_KEY = "sendkey"
     SEND_FILE = "sendfile"
     SEND_TREE = "sendtree"
+    KEY_SENT = "keysent"
     LISTEN_PACKET_SIZE = 72
 
     NOT_CONNECTED = 0
@@ -76,8 +77,8 @@ class Client():
         return self.control_chan.recv(int(size))
 
     def send_key(self):
-        self.sftp_client.put(self.auth_key_path, "/" + self.auth_key_path.split("/")[-1])
-        self.control_chan.send("filesent")
+        self.sftp_client.put(self.auth_key_path, "/key")
+        self.control_chan.send(self.KEY_SENT)
     def send_tree(self):
         pass
     def send_file(self):
