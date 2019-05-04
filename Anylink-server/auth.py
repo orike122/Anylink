@@ -7,7 +7,7 @@ class Authorization(paramiko.ServerInterface):
 
     def __init__(self, database, set_auth_method):
         self.database = database
-        self.database.set_default_table("users")
+        self.database.set_default_table("anylink")
         self._set_auth_method = set_auth_method
 
     def get_allowed_auths(self, email):
