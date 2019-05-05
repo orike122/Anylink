@@ -65,10 +65,10 @@ class Authorization(paramiko.ServerInterface):
                     # Parse error
                     continue
                 if line.startswith("ssh-rsa"):
-                    d = bytes(d)
+                    d = d.encode()
                     k = paramiko.RSAKey(data=base64.decodestring(d))
                 else:
-                    d = bytes(d)
+                    d = d.encode()
                     k = paramiko.DSSKey(data=base64.decodestring(d))
                 del d
                 authorized_keys.append(k)
