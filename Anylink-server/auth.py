@@ -32,12 +32,17 @@ class Authorization(paramiko.ServerInterface):
         return paramiko.AUTH_SUCCESSFUL
 
     def check_auth_publickey(self, email, key):
+        print("check key....")
         user = self.database.search_database(email)
         if user is not None:
+            print("get keys....")
             auth_keys = self._get_auth_keys(user)
             if key in auth_keys:
+                print("set user....")
                 self._set_auth_method(user)
+                print("succ....")
                 return paramiko.AUTH_SUCCESSFUL
+        print("fail....")
         return paramiko.AUTH_FAILED
 
     def check_channel_request(self, kind, chanid):
