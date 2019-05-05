@@ -29,7 +29,7 @@ class Client():
     WAITING_FOR_SFTP_CONNECTION = 1
     WAITING_FOR_CONTROL_CONNECTION = 2
     CONNECTED = 3
-    def __init__(self,server_addr,auth_key_path=None):
+    def __init__(self,server_addr,auth_key_path):
         self.transport = paramiko.Transport((server_addr))
         self.status = self.NOT_CONNECTED
         self.auth_key_path = auth_key_path
@@ -43,17 +43,18 @@ class Client():
         return data.decode("utf-8")
     def connect(self,email,password=None):
         self.status = self.WAITING_FOR_SFTP_CONNECTION
-        if self.auth_key_path is not None:
-            key = paramiko.RSAKey.from_private_key_file(filename=self.auth_key_path)
-            self.transport.connect(username=email,key=key)
-        else:
+        if password is not None:
             self.transport.connect(username=email,password=password)
+        else:
+            key = paramiko.RSAKey.from_private_key_file(filename=self.auth_key_path)
+            self.transport.connect(username=email,pkey=key)
         self.sftp_client = paramiko.SFTPClient.from_transport(self.transport)
         self.status = self.WAITING_FOR_CONTROL_CONNECTION
         self.control_chan = self.transport.open_session()
         self.control_chan.send(self.READY)
         data = self._control_recv(self._size(self.CONFIRM_READY))
         if data == self.CONFIRM_READY:
+            print("connected.........")
             self.status = 3
         else:
             print("control connection failure.............")
@@ -61,7 +62,7 @@ class Client():
     def wait_for_request(self):
         data = self._control_recv(self.LISTEN_PACKET_SIZE)
         if data == self.SEND_KEY:
-            self.send_file()
+            self.send_key()
         elif data == self.SEND_TREE:
             self.send_tree()
         elif data == self.SEND_FILE:

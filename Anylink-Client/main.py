@@ -21,7 +21,7 @@ def main():
         with open("config.json", "w") as f:
             json.dump(json_handle,f)
 
-        client = Client((ip, port))
+        client = Client((ip, port),auth_keys_path+".pub")
         email = input("enter email:")
         passwd = input("enter password:")
         client.connect(email,passwd)
