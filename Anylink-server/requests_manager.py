@@ -23,9 +23,9 @@ class RequestsManager():
                 self.channels[user].send(self.SEND_KEY)
                 data = self.channels[user].recv(56).decode("utf-8")
                 if data == self.KEY_SENT:
-                    with open("/{email_hash}/storage/key".format(email_hash = email_hash),"r") as f:
+                    with open("/{email_hash}/storage/key".format(email_hash = email_hash),"rb") as f:
                         raw_key = f.read()
-                    with open("/{email_hash}/ssh/authorized_keys".format(email_hash = email_hash),"w+") as f:
+                    with open("/{email_hash}/ssh/authorized_keys".format(email_hash = email_hash),"wb+") as f:
                         f.write(raw_key)
                         print("write key")
 
