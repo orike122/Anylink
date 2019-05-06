@@ -30,13 +30,13 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         server_interface = Authorization(self.server.database, self._set_auth_user)
         self.transport.start_server(server=server_interface)
         channel = self.transport.accept(self.TIMEOUT)
-        SFTPHandler.users[self._get_auth_user()["email"]] = self.transport
+        SFTPHandler.users[self.transport] = self._get_auth_user()["email"]
         print(channel)
         if channel is None:
             raise Exception("session channel not opened (auth failed?)")
         self.transport.join()
     def finish(self):
-        del SFTPHandler.users[self._get_auth_user()["email"]]
+        del SFTPHandler.users[self.transport]
 
     def _set_auth_user(self,user):
         self._auth_user = user

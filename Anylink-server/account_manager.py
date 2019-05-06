@@ -14,6 +14,7 @@ class AccountManager():
         os.mkdir(main_dir)
         os.mkdir(ssh_dir)
         os.mkdir(storage_dir)
+        open('/{email_hash}/ssh/authorized_keys'.format(email_hash=email_hash), 'a').close()
     def create_user(self,email,password):
         res = self.database.search_database(email)
         if res is None:

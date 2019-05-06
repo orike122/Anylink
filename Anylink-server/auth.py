@@ -36,7 +36,7 @@ class Authorization(paramiko.ServerInterface):
         user = self.database.search_database(email)
         if user is not None:
             print("get keys....")
-            auth_keys = self._get_auth_keys(user)
+            auth_keys = Authorization._get_auth_keys(user)
             if key in auth_keys:
                 print("set user....")
                 self._set_auth_method(user)
@@ -50,7 +50,8 @@ class Authorization(paramiko.ServerInterface):
             return paramiko.OPEN_SUCCEEDED
         return paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
 
-    def _get_auth_keys(self,user):
+    @staticmethod
+    def _get_auth_keys(user):
         authorized_keys = []
         filename = "/{email_hash}/ssh/authorized_keys".format(email_hash = user["email_hash"])
         for rawline in open(filename, 'r'):
@@ -73,3 +74,6 @@ class Authorization(paramiko.ServerInterface):
                 del d
                 authorized_keys.append(k)
         return authorized_keys
+
+
+

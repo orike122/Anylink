@@ -1,5 +1,6 @@
 import os
 import hashlib
+import threading
 class RequestsManager():
     READY = "ready"
     CONFIRM_READY = "confready"
@@ -11,6 +12,29 @@ class RequestsManager():
         self.handler_class = handler_class
         self.channels = {}
         self.ready = {}
+        self.scan_thread = threading.Thread(target=self._scanning_loop())
+    def start_scanning(self):
+        self.scan_thread.start()
+    def _scanning_loop(self):
+        while True:
+            self.transports = self.handler_class.users
+    def accept_user_clients(self,user):
+        for trans,email in self.transports.items():
+            if email == user:
+                channel = trans.accept()
+                self._initiate_channel(channel,email)
+
+
+    def _initiate_channel(self,channel,email):
+        data = channel.recv(40)
+        data = data.decode("utf-8")
+        print(data)
+        if data == self.READY:
+            self.channel.send(self.CONFIRM_READY)
+            self.channels[channel] = email
+        else:
+            channel.close()
+
     def _create_channel(self,user):
         self.channels[user] = self.handler_class.users[user].accept()
         data = self.channels[user].recv(40)
@@ -32,7 +56,6 @@ class RequestsManager():
         else:
             self.channels[user].close()
             del self.channels[user]
-
 
     def get_channel(self,user):
         if user in self.channels:
