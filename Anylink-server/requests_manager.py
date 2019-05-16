@@ -54,6 +54,8 @@ class RequestsManager():
 
     def get_user_channels(self,email):
         uchans = []
+        print(self.channels)
+        print(type(self.channels))
         for chan,uemail in self.channels:
             if uemail == email:
                 uchans.append(chan)
