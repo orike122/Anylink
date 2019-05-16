@@ -31,7 +31,7 @@ def login_required(f):
 def home():
     get_requests_manager().accept_user_clients(session['user'])
     chans = get_requests_manager().get_user_channels(session['user'])
-    print(chans)
+    print(chans[0].getpeername())
     return render_template("home.html",chans=chans)
 
 @app.route("/login",methods=['POST','GET'])
