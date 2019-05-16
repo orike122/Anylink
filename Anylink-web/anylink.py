@@ -11,6 +11,12 @@ sslify = SSLify(app,permanent=True)
 request_manager = None
 account_manager = None
 
+@app.before_request
+def before_request():
+    if request.url.startswith('http://'):
+        url = request.url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(url, code=code)
 
 def login_required(f):
     @wraps(f)
@@ -51,7 +57,7 @@ def start_website(r_manager,a_manager):
     global request_manager,account_manager
     request_manager = r_manager
     account_manager = a_manager
-    app.run("0.0.0.0",80,debug=False,ssl_context=('anylinknow.pem','private.pem'))
+    app.run("0.0.0.0",443,debug=False,ssl_context=('anylinknow.pem','private.pem'))
 
 def get_account_manager():
     global account_manager
