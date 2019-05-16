@@ -1,5 +1,5 @@
 
-import crypt
+import hashlib
 import os
 class AccountManager():
 
@@ -15,19 +15,17 @@ class AccountManager():
         os.mkdir(ssh_dir)
         os.mkdir(storage_dir)
         open('/{email_hash}/ssh/authorized_keys'.format(email_hash=email_hash), 'a').close()
-    def create_user(self,email,password):
+    def create_user(self,email,passwordh):
         res = self.database.search_database(email)
         if res is None:
-            password_hash = crypt.crypt(password)
-            self.database.add_user(email,password_hash)
-
+            self.database.add_user(email,passwordh)
             user = self.database.search_database(email)
             self._create_dir_structure(user["email_hash"])
             return True
         return False
     def validate_user(self,email,password):
         res = self.database.search_database(email)
-        if res is not None and res["password_hash"] == password:
+        if res is not None and res["password_hash"].lower() == password.lower():
             return True
         else:
             return False
