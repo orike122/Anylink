@@ -1,7 +1,7 @@
 from flask import *
 from functools import wraps
 
-app = Flask(__name__,static_url_path='/.well-known')
+app = Flask(__name__,static_url_path='/static')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
@@ -15,10 +15,6 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
-
-@app.route('/.well-known/acme-challenge/<challenge>')
-def letsencrypt_check(challenge):
-    return send_from_directory('.well-known/acme-challenge/',challenge,as_attachment=True)
 
 @app.route("/")
 @login_required
