@@ -7132,8 +7132,10 @@ li {
   display: inline-block;
   margin-right: 15px; }
 
+
 input.file {
-  visibility: hidden; }
+  visibility: hidden;
+  }
 
 label {
   cursor: pointer; }
