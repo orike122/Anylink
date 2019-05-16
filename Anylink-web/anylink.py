@@ -18,11 +18,7 @@ def login_required(f):
 
 @app.route('/.well-known/acme-challenge/<challenge>')
 def letsencrypt_check(challenge):
-    challenge_response = {
-        "<challenge_token>":"<challenge_response>",
-        "<challenge_token>":"<challenge_response>"
-    }
-    return Response(challenge_response[challenge], mimetype='text/plain')
+    return app.send_static_file('/.well-known/acme-challenge/'+challenge)
 
 @app.route("/")
 @login_required
