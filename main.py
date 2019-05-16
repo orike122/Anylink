@@ -24,3 +24,6 @@ def main():
     requests_manager.start_scanning()
     anylink.start_website(requests_manager,account_manager)
 
+if __name__ == "__main__":
+    main()
+
