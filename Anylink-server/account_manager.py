@@ -27,7 +27,7 @@ class AccountManager():
         return False
     def validate_user(self,email,password):
         res = self.database.search_database(email)
-        if res is not None and res[1] == password:
+        if res is not None and res["password_hash"] == password:
             return True
         else:
             return False
