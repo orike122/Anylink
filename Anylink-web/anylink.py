@@ -26,7 +26,7 @@ def login():
     if request.method == 'POST':
         if validate_login(request.form['username'],
                           request.form['password']):
-            session['username'] = request.form['username']
+            session['user'] = request.form['username']
             return redirect(url_for('home'))
         else:
             error = 'login failed!'
