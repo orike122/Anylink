@@ -41,7 +41,7 @@
               {% if error is not none %}
               <p style="color:red">{{ error }}</p>
               {% endif %}
-              <form id="c_form-h" class="" action="" method="POST">
+              <form id="c_form-h" class="" onsubmit="hashpass()" action="" method="POST">
                 <div class="form-group row">
                   <div class="col-10">
                     <input type="email" class="form-control" id="inputmailh" placeholder="mail@example.com" required="required" name="username"> </div>
@@ -50,7 +50,7 @@
                   <div class="col-10">
                     <input type="password" class="form-control" id="inputpasswordh" placeholder="Password" required="required" name="password"> </div>
                 </div>
-                <button type="submit" class="btn btn-primary" onsubmit="hashpass()">Submit</button>
+                <button type="submit" class="btn btn-primary" >Submit</button>
               </form>
             </div>
           </div>
