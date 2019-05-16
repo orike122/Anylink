@@ -36,7 +36,7 @@ class RequestsManager():
         data = data.decode("utf-8")
         print(data)
         if data == self.READY:
-            self.channel.send(self.CONFIRM_READY)
+            channel.send(self.CONFIRM_READY)
             self.channels[channel] = email
         else:
             channel.close()
