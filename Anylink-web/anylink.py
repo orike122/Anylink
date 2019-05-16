@@ -46,7 +46,7 @@ def start_website(r_manager,a_manager):
     global request_manager,account_manager
     request_manager = r_manager
     account_manager = a_manager
-    app.run("127.0.0.1",80)
+    app.run("0.0.0.0",80)
 
 def get_account_manager():
     global account_manager
