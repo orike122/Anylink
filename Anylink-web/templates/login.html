@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="static/css/theme.css">
 </head>
 
 <body class="bg-primary">
@@ -36,7 +36,7 @@
           <div class="card rounded border-primary border text-info">
             <div class="card-header" style="">Login</div>
             <div class="card-body">
-              {% if error is not None %}
+              {% if error is not none %}
               <p style="color:red">{{ error }}</p>
               {% endif %}
               <form id="c_form-h" class="">
