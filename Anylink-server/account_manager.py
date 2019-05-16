@@ -25,5 +25,11 @@ class AccountManager():
             self._create_dir_structure(user["email_hash"])
             return True
         return False
+    def validate_user(self,email,password):
+        res = self.database.search_database(email)
+        if res is not None and res[1] == password:
+            return True
+        else:
+            return False
 
 
