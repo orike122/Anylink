@@ -1,7 +1,6 @@
 import base64
 
 import paramiko
-import crypt
 class Authorization(paramiko.ServerInterface):
 
 
@@ -21,7 +20,7 @@ class Authorization(paramiko.ServerInterface):
         if user is not None:
             print("user in records...")
             pwhash = user["password_hash"]
-            if crypt.crypt(password, pwhash) != pwhash:
+            if password == pwhash:
                 print("user passwd is wrong...")
                 return paramiko.AUTH_FAILED
         else:
