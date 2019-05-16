@@ -14,7 +14,7 @@ class RequestsManager():
         self.ready = {}
         self.scan = False
         self.scan_thread = threading.Thread(target=self._scanning_loop())
-        self.transports = []
+        self.transports = {}
 
     def start_scanning(self):
         self.scan = True
@@ -23,6 +23,7 @@ class RequestsManager():
         self.scan = False
     def _scanning_loop(self):
         while self.scan:
+            print("hi")
             self.transports = self.handler_class.users
     def accept_user_clients(self,user):
         for trans,email in self.transports.items():
