@@ -23,7 +23,6 @@ class RequestsManager():
         self.scan = False
     def _scanning_loop(self):
         while self.scan:
-            print("hi")
             self.transports = self.handler_class.users
     def accept_user_clients(self,user):
         for trans,email in self.transports.items():
