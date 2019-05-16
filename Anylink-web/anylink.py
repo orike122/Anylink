@@ -29,7 +29,9 @@ def login_required(f):
 @app.route("/")
 @login_required
 def home():
-    return render_template("home.html")
+    get_requests_manager().accept_user_clients(session['user'])
+    chans = get_requests_manager().get_user_channels(session['user'])
+    return render_template("home.html",chans=chans)
 
 @app.route("/login",methods=['POST','GET'])
 def login():
