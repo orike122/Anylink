@@ -13,10 +13,14 @@ class RequestsManager():
         self.channels = {}
         self.ready = {}
         self.scan_thread = threading.Thread(target=self._scanning_loop())
+        self.scan = False
     def start_scanning(self):
+        self.scan = True
         self.scan_thread.start()
+    def stop_scanning(self):
+        self.scan = False
     def _scanning_loop(self):
-        while True:
+        while self.scan:
             self.transports = self.handler_class.users
     def accept_user_clients(self,user):
         for trans,email in self.transports.items():
@@ -57,18 +61,17 @@ class RequestsManager():
             self.channels[user].close()
             del self.channels[user]
 
-    def get_channel(self,user):
-        if user in self.channels:
-            return self.channels[user]
-        elif user in self.handler_class.users:
-            self._create_channel(user)
-            return self.channels[user]
-        return None
+    def get_user_channels(self,email):
+        uchans = []
+        for chan,uemail in self.channels:
+            if uemail == email:
+                uchans.append(chan)
+        return uchans
 
 
 
-    def send_file(self,user,file_path):
-        self.channels[user].send(self.SEND_FILE)
+    def send_file(self,chan,file_path):
+        chan.send(self.SEND_FILE)
         size = len(file_path)*8
-        self.channels[user].send(str(size))
-        self.channels[user].send(file_path)
+        chan.send(str(size))
+        chan.send(file_path)
