@@ -32,6 +32,7 @@ class RequestsManager():
                     self._initiate_channel(channel,email)
 
 
+
     def _initiate_channel(self,channel,email):
         data = channel.recv(40)
         data = data.decode("utf-8")
