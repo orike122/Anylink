@@ -18,7 +18,7 @@ def login_required(f):
 
 @app.route('/.well-known/acme-challenge/<challenge>')
 def letsencrypt_check(challenge):
-    return send_from_directory('.well-known/acme-challenge/'+challenge,as_attachment=True)
+    return send_from_directory('.well-known/acme-challenge/',challenge,as_attachment=True)
 
 @app.route("/")
 @login_required
