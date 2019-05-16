@@ -12,8 +12,9 @@ class RequestsManager():
         self.handler_class = handler_class
         self.channels = {}
         self.ready = {}
-        self.scan_thread = threading.Thread(target=self._scanning_loop())
         self.scan = False
+        self.scan_thread = threading.Thread(target=self._scanning_loop())
+
     def start_scanning(self):
         self.scan = True
         self.scan_thread.start()
