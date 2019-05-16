@@ -35,7 +35,7 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
-    session.pop('username',None)
+    session.pop('user',None)
     return redirect(url_for('logout'))
 
 def validate_login(username,password):
