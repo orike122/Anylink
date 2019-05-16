@@ -46,17 +46,6 @@ class RequestsManager():
         print(data)
         if data == self.READY:
             self.channels[user].send(self.CONFIRM_READY)
-            email_hash = hashlib.sha256(user.encode("utf-8")).hexdigest()
-            if not os.path.isfile("/{email_hash}/ssh/authorized_keys".format(email_hash = email_hash)):
-                self.channels[user].send(self.SEND_KEY)
-                data = self.channels[user].recv(56).decode("utf-8")
-                if data == self.KEY_SENT:
-                    with open("/{email_hash}/storage/key".format(email_hash = email_hash),"rb") as f:
-                        raw_key = f.read()
-                    with open("/{email_hash}/ssh/authorized_keys".format(email_hash = email_hash),"wb+") as f:
-                        f.write(raw_key)
-                        print("write key")
-
         else:
             self.channels[user].close()
             del self.channels[user]
