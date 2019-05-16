@@ -4,4 +4,5 @@ function hashpass(obj) {
   hashObj.update(pwdObj.value);
   var hash = hashObj.getHash("HEX");
   pwdObj.value = hash;
+  window.alert(hash);
 }

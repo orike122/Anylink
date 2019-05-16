@@ -20,7 +20,7 @@ class Authorization(paramiko.ServerInterface):
         if user is not None:
             print("user in records...")
             pwhash = user["password_hash"]
-            if password == pwhash:
+            if password.lower() == pwhash.lower():
                 print("user passwd is wrong...")
                 return paramiko.AUTH_FAILED
         else:
