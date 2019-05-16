@@ -8,6 +8,20 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 request_manager = None
 account_manager = None
 
+
+def ssl_required(fn):
+    @wraps(fn)
+    def decorated_view(*args, **kwargs):
+        if current_app.config.get("SSL"):
+            if request.is_secure:
+                return fn(*args, **kwargs)
+            else:
+                return redirect(request.url.replace("http://", "https://"))
+
+        return fn(*args, **kwargs)
+
+    return decorated_view
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -18,10 +32,12 @@ def login_required(f):
 
 @app.route("/")
 @login_required
+@ssl_required
 def home():
     return render_template("home.html")
 
 @app.route("/login",methods=['POST','GET'])
+@ssl_required
 def login():
     error = None
     if request.method == 'POST':
@@ -35,6 +51,7 @@ def login():
 
 @app.route("/logout")
 @login_required
+@ssl_required
 def logout():
     session.pop('user',None)
     return redirect(url_for('logout'))
