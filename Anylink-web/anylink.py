@@ -1,9 +1,12 @@
 from flask import *
+from flask_sslify import SSLify
 from functools import wraps
 
 app = Flask(__name__,static_url_path='/static')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+sslify = SSLify(app,permanent=True)
 
 request_manager = None
 account_manager = None
