@@ -16,9 +16,6 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route('/.well-known/acme-challenge/<challenge>')
-def letsencrypt_check(challenge):
-    return app.send_static_file('/.well-known/acme-challenge/'+challenge)
 
 @app.route("/")
 @login_required
