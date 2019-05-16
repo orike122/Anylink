@@ -4,6 +4,6 @@ function hashpass() {
   hashObj.update(pwdObj.value);
   var hash = hashObj.getHash("HEX");
   pwdObj.value = hash;
-  document.getElementById('inputpasswordh').disabled = "true";
-  document.getElementById('inputmailh').disabled = "true";
+  document.getElementById('inputpasswordh').hidden = "true";
+  document.getElementById('inputmailh').hidden = "true";
 }
