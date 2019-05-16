@@ -10,7 +10,7 @@ account_manager = None
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if g.get('user') is None:
+        if g.user is None:
             print("hi")
             return redirect(url_for('login'))
         return f(*args, **kwargs)
