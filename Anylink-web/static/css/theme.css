@@ -7133,27 +7133,3 @@ li {
   margin-right: 15px; }
 
 
-input.file {
-  visibility: hidden;
-  }
-
-label {
-  cursor: pointer; }
-
-input.file:checked + label {
-  font-size: 1.3rem; }
-
-.navbar {
-  transition: all 0.6s ease-in-out; }
-
-.navbar.scrolled a {
-  color: #000 !important; }
-
-.navbar.scrolled p {
-  color: #000 !important; }
-
-.navbar {
-  background-color: #098c53; }
-
-.navbar.scrolled {
-  background-color: rgba(9, 140, 83, 0.1); }
