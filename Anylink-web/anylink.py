@@ -16,6 +16,14 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.route('/.well-known/acme-challenge/<challenge>')
+def letsencrypt_check(challenge):
+    challenge_response = {
+        "<challenge_token>":"<challenge_response>",
+        "<challenge_token>":"<challenge_response>"
+    }
+    return Response(challenge_response[challenge], mimetype='text/plain')
+
 @app.route("/")
 @login_required
 def home():
