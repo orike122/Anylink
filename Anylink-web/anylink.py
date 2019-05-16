@@ -1,7 +1,8 @@
 from flask import *
 from functools import wraps
 
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='/static')
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 request_manager = None
