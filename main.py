@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '/home/orikeidar01/Anylink-develop/Anylink-server')
+sys.path.insert(0, '/home/orikeidar01/Anylink-develop/Anylink-web')
 from config import Configuration
 from server import AnylinkServer,SFTPHandler
 import threading
