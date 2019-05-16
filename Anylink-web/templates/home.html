@@ -46,10 +46,10 @@
             <div class="dropdown-menu w-100 text-center" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
             {% for chan in range(chans|length-1) %}
               {% if not loop.last %}
-              <a class="dropdown-item" href="#">{{ chan.getpeername() }}</a>
+              <a class="dropdown-item" href="#">{{ chan.getpeername()[0] }}</a>
               <div class="dropdown-divider"></div>
               {% else %}
-              <a class="dropdown-item" href="#">{{ chan.getpeername() }}</a>
+              <a class="dropdown-item" href="#">{{ chan.getpeername()[0] }}</a>
               {% endif %}
             {% endfor %}
             </div>
