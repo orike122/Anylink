@@ -13,7 +13,7 @@ class RequestsManager():
         self.channels = {}
         self.ready = {}
         self.scan = False
-        self.scan_thread = threading.Thread(target=self._scanning_loop())
+        self.scan_thread = threading.Thread(target=self._scanning_loop)
         self.transports = {}
 
     def start_scanning(self):
