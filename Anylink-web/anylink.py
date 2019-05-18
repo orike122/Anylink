@@ -42,7 +42,7 @@ def home():
         else:
             file = request.form['file']
             print(file)
-        dirs,files = get_requests_manager().send_tree(session['user'][0],session['current_path'])
+    dirs,files = get_requests_manager().send_tree(session['user'][0],session['current_path'])
     return render_template("home.html",chans=chans,dirs = dirs,files = files)
 
 @app.route("/login",methods=['POST','GET'])
