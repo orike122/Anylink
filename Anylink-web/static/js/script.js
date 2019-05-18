@@ -9,6 +9,6 @@ function hashpass() {
 }
 
 function set_type(var type) {
-    elmnt =document.getElementById(type)
-    elmnt.value = 'TRUE'
+    elmnt =document.getElementById(type);
+    elmnt.value = 'TRUE';
 }
