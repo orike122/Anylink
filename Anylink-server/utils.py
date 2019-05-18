@@ -6,8 +6,10 @@ class PathBuilder():
 
     def __add__(self, other):
         self.current_path = os.path.join(self.current_path,other)
-    def __isub__(self, other):
+        return self.current_path
+    def __sub__(self, other):
         self.current_path = os.path.dirname(self.current_path)
+        return self.current_path
 
     def __str__(self):
         return self.current_path

@@ -35,10 +35,10 @@ def home():
     print(chans[0].getpeername())
     if request.method == 'POST':
         if request.form['back'] == 'TRUE':
-            session['current_path'] -= 1
+            session['current_path'] = PathBuilder(session['current_path']) - 1
         elif request.form['dir'] == 'TRUE':
             new_dir = request.form['new_dir']
-            session['current_path'] + new_dir
+            session['current_path'] = PathBuilder(session['current_path']) + new_dir
         else:
             file = request.form['file']
             print(file)
@@ -52,7 +52,7 @@ def login():
         if validate_login(request.form['username'],
                           request.form['password']):
             session['user'] = request.form['username']
-            session['current_path'] = PathBuilder('/')
+            session['current_path'] = '/'
             return redirect(url_for('home'))
         else:
             error = 'login failed!'
