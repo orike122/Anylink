@@ -1,6 +1,7 @@
 from flask import *
 from flask_sslify import SSLify
 from functools import wraps
+from utils import PathBuilder
 
 app = Flask(__name__,static_url_path='/static')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -10,7 +11,7 @@ sslify = SSLify(app,permanent=True)
 
 request_manager = None
 account_manager = None
-
+current_paths = {}
 @app.before_request
 def before_request():
     if request.url.startswith('http://'):
@@ -26,13 +27,23 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route("/")
+@app.route("/",methods=['POST','GET'])
 @login_required
 def home():
     get_requests_manager().accept_user_clients(session['user'])
     chans = get_requests_manager().get_user_channels(session['user'])
     print(chans[0].getpeername())
-    return render_template("home.html",chans=chans)
+    if request.method == 'POST':
+        if request.form['back'] == 'TRUE':
+            session['current_path'] -= 1
+        elif request.form['dir'] == 'TRUE':
+            new_dir = request.form['new_dir']
+            session['current_path'] + new_dir
+        else:
+            file = request.form['file']
+            print(file)
+        dirs,files = get_requests_manager().send_tree(session['user'][0],session['current_path'])
+    return render_template("home.html",chans=chans,dirs = dirs,files = files)
 
 @app.route("/login",methods=['POST','GET'])
 def login():
@@ -41,6 +52,7 @@ def login():
         if validate_login(request.form['username'],
                           request.form['password']):
             session['user'] = request.form['username']
+            session['current_path'] = PathBuilder('/')
             return redirect(url_for('home'))
         else:
             error = 'login failed!'

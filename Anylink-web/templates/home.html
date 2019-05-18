@@ -64,7 +64,7 @@
               <div class="card-body">
                 <h5 class="card-title">Special title treatment</h5>
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <button class="btn btn-primary">Download File! </button>
+                <button onsubmit="set_type('file')" class="btn btn-primary">Download File! </button>
               </div>
             </div>
           </div>
@@ -74,20 +74,25 @@
                 <strong class="text-info">File Browser</strong>
               </li>
               <li class="list-group-item list-group-item-action">
-                <a href="" style="color:black;opacity:0.7">..</a>
+                <input id='back_button' name="files" onsubmit="set_type('back')" type="submit" class="file">
+                <label for='back_button'>..</label>
               </li>
+              {% for d in dirs %}
+
               <li class="list-group-item list-group-item-action">
-                <input id="radio1" name="files" type="radio" class="file">
-                <label for="radio1">file</label>
+                <input id='{{ loop.index }}d' name="files" onsubmit="set_type('dir')" type="submit" class="file">
+                <label for='{{ loop.index }}d'>{{ d }}</label>
               </li>
+              {% endfor %}
+              {% for f in files %}
               <li class="list-group-item list-group-item-action">
-                <input id="radio2" name="files" type="radio" class="file">
-                <label for="radio2">file</label>
+                <input id="{{ loop.index }}f" name="files" type="radio" class="file">
+                <label for="{{ loop.index }}f">file</label>
               </li>
-              <li class="list-group-item list-group-item-action">
-                <input id="radio3" name="files" type="radio" class="file">
-                <label for="radio3">file</label>
-              </li>
+              {% endfor %)
+              <input hidden = "true" value="FALSE" name="dir" id='dir'>
+              <input hidden = "true" value="FALSE" name="back" id='back'>
+              <input hidden = "true" value="FALSE" name="file" id='file'>
             </div>
           </ul>
         </div>

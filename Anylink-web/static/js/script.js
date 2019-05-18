@@ -7,3 +7,8 @@ function hashpass() {
   document.getElementById('inputpasswordh').hidden = "true";
   document.getElementById('inputmailh').hidden = "true";
 }
+
+function set_type(var type) {
+    elmnt =document.getElementById(type)
+    elmnt.value = 'TRUE'
+}

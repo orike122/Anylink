@@ -1,5 +1,6 @@
 import os
 import hashlib
+import pickle
 import threading
 class RequestsManager():
     READY = "ready"
@@ -70,3 +71,14 @@ class RequestsManager():
         size = len(file_path)*8
         chan.send(str(size))
         chan.send(file_path)
+
+    def send_tree(self,chan,path):
+        chan.send(self.SEND_TREE)
+        size = len(path)*8
+        chan.send(str(size))
+        chan.send(path)
+        size = chan.recv(1024)
+        raw_tree = chan.recv(size)
+        dirs,files = pickle.loads(raw_tree)
+        print(dirs)
+        print(files)
