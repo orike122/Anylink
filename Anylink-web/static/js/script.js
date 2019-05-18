@@ -8,7 +8,7 @@ function hashpass() {
   document.getElementById('inputmailh').hidden = "true";
 }
 
-function set_type(var type) {
+function set_type(type) {
     elmnt =document.getElementById(type);
     elmnt.value = 'TRUE';
 }
