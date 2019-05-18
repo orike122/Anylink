@@ -82,3 +82,4 @@ class RequestsManager():
         dirs,files = pickle.loads(raw_tree)
         print(dirs)
         print(files)
+        return dirs,files
