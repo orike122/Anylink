@@ -34,7 +34,7 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         print(channel)
         if channel is None:
             raise Exception("session channel not opened (auth failed?)")
-        self.transport.join()
+        #self.transport.join()
     def finish(self):
         del SFTPHandler.users[self.transport]
 
