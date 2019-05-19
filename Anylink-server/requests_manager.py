@@ -68,19 +68,20 @@ class RequestsManager():
 
     def send_file(self,chan,file_path):
         chan.send(self.SEND_FILE)
-        size = str(len(file_path)*8)
-        size += '.' * int((1024 - len(size) * 8) / 8)
+        size = str(len(file_path))
+        size += '.' * int((64 - len(size)))
         chan.send(str(size))
         chan.send(file_path)
 
     def send_tree(self,chan,path):
         chan.send(self.SEND_TREE)
-        size = len(path)*8
+        size = len(path)
         size = str(size)
-        size += '.' * int((1024 - len(size) * 8) / 8)
+        print(size)
+        size += '.' * int((64 - len(size)))
         chan.send(str(size))
         chan.send(path)
-        size = chan.recv(1024)
+        size = chan.recv(64)
         size = size.decode('utf-8')
         size = size.replace('.','')
         raw_tree = chan.recv(int(size))
