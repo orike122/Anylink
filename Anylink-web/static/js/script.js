@@ -13,7 +13,7 @@ function send_path(type,name) {
         $.ajax({
           dataType: 'native',
           url: "/file_browser",
-          type: "get"
+          type: "get",
           xhrFields: {
             responseType: 'blob'
           },
