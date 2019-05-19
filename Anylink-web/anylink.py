@@ -27,24 +27,30 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route("/",methods=['POST','GET'])
+@app.route("/",methods=['GET'])
 @login_required
 def home():
     get_requests_manager().accept_user_clients(session['user'])
     chans = get_requests_manager().get_user_channels(session['user'])
     print(chans[0].getpeername())
-    if request.method == 'POST':
-        if request.form['back'] == 'TRUE':
-            session['current_path'] = PathBuilder(session['current_path']) - 1
-        elif request.form['dir'] == 'TRUE':
-            new_dir = request.form['new_dir']
-            session['current_path'] = PathBuilder(session['current_path']) + new_dir
-        else:
-            file = request.form['file']
-            print(file)
     dirs,files = get_requests_manager().send_tree(chans[0],session['current_path'])
-    return render_template("home.html",chans=chans,dirs = dirs,files = files)
+    return render_template("home.html",chans=chans)
 
+@app.route("/file_browser")
+def file_browser():
+    chans = get_requests_manager().get_user_channels(session['user'])
+    req = request.args.get('jsdata')
+    tp,name = req.split(',')
+    if tp == 'back':
+        session['current_path'] = PathBuilder(session['current_path']) - 1
+    elif tp == 'dir':
+        new_dir = name
+        session['current_path'] = PathBuilder(session['current_path']) + name
+    elif tp == 'file':
+        pass
+    print(name)
+    dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
+    return render_template("file_browser",dirs = dirs,files=files)
 @app.route("/login",methods=['POST','GET'])
 def login():
     error = None

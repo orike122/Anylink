@@ -8,11 +8,16 @@ function hashpass() {
   document.getElementById('inputmailh').hidden = "true";
 }
 
-function set_type(type) {
-    elmnt =document.getElementById(type);
-    elmnt.value = 'TRUE';
-}
-function set_path(path) {
-    elmnt =document.getElementById('new_path');
-    elmnt.value = path;
+function send_path(type,name) {
+    $.ajax({
+      url: "/file_browser",
+      type: "get",
+      data: {jsdata: type+','+name},
+      success: function(response) {
+        $("#file_browser").html(response);
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
 }
