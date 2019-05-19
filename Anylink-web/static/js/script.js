@@ -11,21 +11,22 @@ function hashpass() {
 function send_path(type,name) {
     if (type == 'file'){
         $.ajax({
-          dataType: 'native',
-          url: "/file_browser",
-          data: {jsdata: type+','+name},
-          type: "get",
-          xhrFields: {
-            responseType: 'blob'
-          },
-          success: function(blob){
-            console.log(blob.size);
-              var link=document.createElement('a');
-              link.href=window.URL.createObjectURL(blob);
-              link.download=name;
-              document.body.appendChild(link);
-              link.click();
-          }
+            url: "/file_browser",
+            type: "get",
+            data: {jsdata: type+','+name},
+            success: function(response) {
+                var win = window.open('https://anylinknow.tk/download_file', '_blank');
+                if (win) {
+                    //Browser has allowed it to be opened
+                    win.focus();
+                } else {
+                    //Browser has blocked it
+                    alert('Please allow popups for this website');
+                }
+            },
+            error: function(xhr) {
+            //Do Something to handle error
+            }
         });
     }
     else {
