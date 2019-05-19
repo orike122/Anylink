@@ -9,6 +9,7 @@ function hashpass() {
 }
 
 function send_path(type,name) {
+    $(window).alert('hi');
     $.ajax({
       url: "/file_browser",
       type: "get",
