@@ -15,7 +15,7 @@ function send_path(type,name) {
             type: "get",
             data: {jsdata: type+','+name},
             success: function(response) {
-                var win = window.open('https://anylinknow.tk/download_file', '_blank');
+                var win = window.open('/download_file', '_blank');
                 if (win) {
                     //Browser has allowed it to be opened
                     win.focus();
