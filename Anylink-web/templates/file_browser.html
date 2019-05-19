@@ -7,13 +7,13 @@
 </li>
 {% for d in dirs %}
 <li class="list-group-item list-group-item-action">
-<input id='{{ loop.index }}d' name="dir" type="button" onclick="send_path('dir','{{ d }}')">
+<input id='{{ loop.index }}d' name="dir" type="button" style="color: yellow" onclick="send_path('dir','{{ d }}')">
 <label for='{{ loop.index }}d'>{{ d }}</label>
 </li>
 {% endfor %}
 {% for f in files %}
 <li class="list-group-item list-group-item-action">
-<input id="{{ loop.index }}f" name="file" type="button" onclick="send_path('file','{{ f }}')">
+<input id="{{ loop.index }}f" name="file" type="button"  style="color: blue" onclick="send_path('file','{{ f }}')">
 <label for="{{ loop.index }}f">{{ f }}</label>
 </li>
 {% endfor %}

@@ -69,15 +69,19 @@ class RequestsManager():
     def send_file(self,chan,file_path):
         chan.send(self.SEND_FILE)
         size = len(file_path)*8
+        size += '.' * int((1024 - len(size) * 8) / 8)
         chan.send(str(size))
         chan.send(file_path)
 
     def send_tree(self,chan,path):
         chan.send(self.SEND_TREE)
         size = len(path)*8
+        size = str(size)
+        size += '.' * int((1024 - len(size) * 8) / 8)
         chan.send(str(size))
         chan.send(path)
         size = chan.recv(1024)
+        size = size.replace('.','')
         raw_tree = chan.recv(int(size))
         dirs,files = pickle.loads(raw_tree)
         print(dirs)
