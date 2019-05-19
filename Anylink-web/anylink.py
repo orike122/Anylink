@@ -51,7 +51,7 @@ def file_browser():
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
         email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
         fpath = "/{email_hash}/storage".format(email_hash=email_hash)
-        return send_from_directory(PathBuilder(fpath)+name,as_attachment=True)
+        return send_from_directory(fpath,name,as_attachment=True)
     print(name)
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
     dirs = [d.decode('utf-8') for d in dirs]
