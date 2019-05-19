@@ -68,7 +68,7 @@ class RequestsManager():
 
     def send_file(self,chan,file_path):
         chan.send(self.SEND_FILE)
-        size = len(file_path)*8
+        size = str(len(file_path)*8)
         size += '.' * int((1024 - len(size) * 8) / 8)
         chan.send(str(size))
         chan.send(file_path)
