@@ -9,7 +9,7 @@ function hashpass() {
 }
 
 function send_path(type,name) {
-    if type == 'file'{
+    if (type == 'file'){
         $.ajax({
           dataType: 'native',
           url: "/file_browser",
