@@ -12,3 +12,7 @@ function set_type(type) {
     elmnt =document.getElementById(type);
     elmnt.value = 'TRUE';
 }
+function set_path(path) {
+    elmnt =document.getElementById('new_path');
+    elmnt.value = path;
+}
