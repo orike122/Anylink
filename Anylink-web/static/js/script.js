@@ -14,6 +14,7 @@ function send_path(type,name) {
             url: "/file_browser",
             type: "get",
             data: {jsdata: type+','+name},
+            async: false,
             success: function(response) {
                 var win = window.open('/download_file', '_blank');
                 if (win) {
@@ -34,6 +35,7 @@ function send_path(type,name) {
           url: "/file_browser",
           type: "get",
           data: {jsdata: type+','+name},
+          async: false,
           success: function(response) {
             $("#file_browser").html(response);
           },
