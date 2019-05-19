@@ -78,7 +78,7 @@ class RequestsManager():
         chan.send(str(size))
         chan.send(path)
         size = chan.recv(1024)
-        raw_tree = chan.recv(size)
+        raw_tree = chan.recv(int(size))
         dirs,files = pickle.loads(raw_tree)
         print(dirs)
         print(files)
