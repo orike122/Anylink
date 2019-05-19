@@ -1,4 +1,7 @@
 import paramiko
+import os
+import pickle
+import io
 
 """
 protocol:
@@ -10,7 +13,10 @@ Client -> Server: <<key>>
 Server -> Client: "sendfile"
 Server -> Client: <<size>>
 Server -> Client: <<path>>
+Client -> Server: <<file>>
 Server -> Client: "sendtree"
+Server -> Client: <<size>>
+Server -> Client: <<path>>
 Client -> Server: <<size>>
 Client -> Server: <<tree>>
 """
@@ -64,7 +70,7 @@ class Client():
             self.send_file()
     def send_with_size(self,s):
         size = self._size(s)
-        self.control_chan.send(size)
+        self.control_chan.send(str(size))
         self.control_chan.send(s)
 
     def recv_with_size(self):
@@ -72,7 +78,14 @@ class Client():
         print(size.decode("utf-8"))
         return self.control_chan.recv(int(size))
     def send_tree(self):
-        pass
+        path = self.recv_with_size()
+        ls = os.listdir(path)
+        dirs = [d for d in ls if os.path.isdir(os.path.join(path,d))]
+        files = [f for f in ls if os.path.isfile(os.path.join(path,f))]
+        print(dirs)
+        print(files)
+        pkl = pickle.dumps((dirs,files))
+        self.send_with_size(pkl)
     def send_file(self):
         path = self.recv_with_size()
         self.sftp_client.put(path,"/"+path.split("/")[-1])
