@@ -50,8 +50,8 @@ def file_browser():
         pass
     print(name)
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
-    dirs = [d.encode('utf-8') for d in dirs]
-    files = [f.encode('utf-8') for f in files]
+    dirs = [d.decode('utf-8') for d in dirs]
+    files = [f.decode('utf-8') for f in files]
     return render_template("file_browser",dirs = dirs,files=files)
 @app.route("/login",methods=['POST','GET'])
 def login():
