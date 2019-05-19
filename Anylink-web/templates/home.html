@@ -87,8 +87,8 @@
               {% endfor %}
               {% for f in files %}
               <li class="list-group-item list-group-item-action">
-                <input id="{{ loop.index }}f" name="files" type="radio" class="file">
-                <label for="{{ loop.index }}f">file</label>
+                <input id="{{ loop.index }}f" name="files" type="sumbit" class="file">
+                <label for="{{ loop.index }}f">{{ f }}</label>
               </li>
               {% endfor %}
               <input hidden = "true" value="FALSE" name="dir" id='dir'>
