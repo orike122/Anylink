@@ -33,7 +33,6 @@ def home():
     get_requests_manager().accept_user_clients(session['user'])
     chans = get_requests_manager().get_user_channels(session['user'])
     print(chans[0].getpeername())
-    dirs,files = get_requests_manager().send_tree(chans[0],session['current_path'])
     return render_template("home.html",chans=chans)
 
 @app.route("/file_browser")
