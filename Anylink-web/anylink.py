@@ -37,6 +37,7 @@ def home():
     return render_template("home.html",chans=chans)
 
 @app.route("/file_browser")
+@login_required
 def file_browser():
     chans = get_requests_manager().get_user_channels(session['user'])
     req = request.args.get('jsdata')
