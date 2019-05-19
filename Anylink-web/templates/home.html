@@ -81,7 +81,7 @@
               </li>
               {% for d in dirs %}
               <li class="list-group-item list-group-item-action">
-                <input id='{{ loop.index }}d' name="files" onsubmit="set_type('dir');set_path('{{ d }});" type="submit" class="file">
+                <input id='{{ loop.index }}d' name="files" onsubmit="set_type('dir');set_path('{{ d }}');" type="submit" class="file">
                 <label for='{{ loop.index }}d'>{{ d }}</label>
               </li>
               {% endfor %}
