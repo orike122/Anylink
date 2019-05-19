@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.0.2/sha.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="static/js/script.js?123"></script>
+
   <script> function checkScroll(){
     	var startY = 0; //The point where the navbar changes in px
       if($(window).scrollTop() > startY){
@@ -21,6 +22,11 @@
 </head>
 
 <body class="bg-light" style="	background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));	background-position: top left;	background-size: 100%;	background-repeat: repeat;" onload="send_path('dir,/')">
+  <script>
+    $(document).ready(function() {
+      console.log($.ajax);
+    });
+  </script>
   <nav class="navbar fixed-top navbar-expand-lg navbar-light sticky-top" id="fixednav" style="">
     <div class="container"> <button class="navbar-toggler navbar-toggler-right border-0 p-0" type="button" data-toggle="collapse" data-target="#navbar20">
         <p class="navbar-brand text-white mb-0">
