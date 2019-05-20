@@ -5,6 +5,8 @@ from utils import PathBuilder
 import hashlib
 from threading import Lock
 import os
+import pdb
+
 
 app = Flask(__name__,static_url_path='/static')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -65,7 +67,7 @@ def file_browser():
         new_dir = name
         session['current_path'] = PathBuilder(session['current_path']) + name
     elif tp == 'file':
-        breakpoint()
+        pdb.set_trace()
         print(tp)
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
         print(2)
