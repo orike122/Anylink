@@ -9,39 +9,26 @@ function hashpass() {
 }
 
 function send_path(type,name) {
-    if (type == 'file'){
-        $.ajax({
-            url: "/file_browser",
-            type: "get",
-            data: {jsdata: type+','+name},
-            async: false,
-            success: function(response) {
-                var win = window.open('/download_file', '_blank');
-                if (win) {
-                    //Browser has allowed it to be opened
-                    win.focus();
-                } else {
-                    //Browser has blocked it
-                    alert('Please allow popups for this website');
-                }
-            },
-            error: function(xhr) {
-            //Do Something to handle error
-            }
-        });
-    }
-    else {
-        $.ajax({
-          url: "/file_browser",
-          type: "get",
-          data: {jsdata: type+','+name},
-          async: false,
-          success: function(response) {
+    $.ajax({
+        url: "/file_browser",
+        type: "get",
+        data: {jsdata: type+','+name},
+        async: false,
+        success: function(response) {
             $("#file_browser").html(response);
-          },
-          error: function(xhr) {
-            //Do Something to handle error
-          }
-        });
+        },
+        error: function(xhr) {
+        //Do Something to handle error
+        }
+    });
+    if (type == 'file'){
+        var win = window.open('/download_file', '_blank');
+        if (win) {
+            //Browser has allowed it to be opened
+            win.focus();
+        } else {
+            //Browser has blocked it
+            alert('Please allow popups for this website');
+        }
     }
 }
