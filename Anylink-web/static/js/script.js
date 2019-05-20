@@ -15,19 +15,19 @@ function send_path(type,name) {
         data: {jsdata: type+','+name},
         success: function(response) {
             $("#file_browser").html(response);
+            if (type == 'file'){
+                var win = window.open('/download_file', '_blank');
+                if (win) {
+                    //Browser has allowed it to be opened
+                    win.focus();
+                } else {
+                    //Browser has blocked it
+                    alert('Please allow popups for this website');
+                }
+            }
         },
         error: function(xhr) {
         //Do Something to handle error
         }
     });
-    if (type == 'file'){
-        var win = window.open('/download_file', '_blank');
-        if (win) {
-            //Browser has allowed it to be opened
-            win.focus();
-        } else {
-            //Browser has blocked it
-            alert('Please allow popups for this website');
-        }
-    }
 }
