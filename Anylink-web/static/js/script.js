@@ -14,15 +14,15 @@ function send_path(type,name) {
         type: "get",
         data: {jsdata: type+','+name},
         success: function(response) {
-            console.log('success')
-            console.log(type)
+            console.log('success');
+            console.log(type);
             $("#file_browser").html(response);
             if (type == 'file'){
-                console.log('open win')
+                console.log('open win');
                 var win = window.open('/download_file', '_blank');
                 if (win) {
                     //Browser has allowed it to be opened
-                    console.log('focus win')
+                    console.log('focus win');
                     win.focus();
                 } else {
                     //Browser has blocked it
@@ -33,6 +33,6 @@ function send_path(type,name) {
         error: function(xhr) {
         //Do Something to handle error
         }
-        console.log('end')
+        console.log('end');
     });
 }
