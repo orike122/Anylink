@@ -42,13 +42,18 @@ def file_browser():
     chans = get_requests_manager().get_user_channels(session['user'])
     req = request.args.get('jsdata')
     tp,name = req.split(',')
+    print(tp,name)
     if tp == 'back':
+        print(tp)
         session['current_path'] = PathBuilder(session['current_path']) - 1
     elif tp == 'dir':
+        print(tp)
         new_dir = name
         session['current_path'] = PathBuilder(session['current_path']) + name
     elif tp == 'file':
+        print(tp)
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
+        print(2)
         session['file_to_download'] = name
     print(name)
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
