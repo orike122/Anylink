@@ -65,23 +65,22 @@ def file_browser():
         new_dir = name
         session['current_path'] = PathBuilder(session['current_path']) + name
     elif tp == 'file':
-        get_file_transfer_mutex().acquire()
         print(tp)
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
         print(2)
         session['file_to_download'] = name
         print(session['file_to_download'])
+
     print("current dir....... "+session['current_path'])
     print(name)
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
     dirs = [d.decode('utf-8') for d in dirs]
     files = [f.decode('utf-8') for f in files]
-    get_file_transfer_mutex().release()
+
     return render_template("file_browser.html",dirs = dirs,files=files)
 @app.route("/download_file")
 @login_required
 def download_file():
-    get_file_transfer_mutex().acquire()
     hold_until_transfered()
     print('file_to_download' in session)
     print(session['file_to_download'])
@@ -91,9 +90,7 @@ def download_file():
         session['file_to_download'] = None
         email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
         fpath = "/{email_hash}/storage".format(email_hash=email_hash)
-        get_file_transfer_mutex().release()
         return send_from_directory(fpath,f,as_attachment=True)
-    get_file_transfer_mutex().release()
 
 @app.route("/login",methods=['POST','GET'])
 def login():
