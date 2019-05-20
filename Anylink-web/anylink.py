@@ -3,6 +3,8 @@ from flask_sslify import SSLify
 from functools import wraps
 from utils import PathBuilder
 import hashlib
+from threading import Lock
+import os
 
 app = Flask(__name__,static_url_path='/static')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -13,6 +15,18 @@ sslify = SSLify(app,permanent=True)
 request_manager = None
 account_manager = None
 current_paths = {}
+file_transfer_mutex = Lock()
+def get_file_transfer_mutex():
+    global file_transfer_mutex
+    return file_transfer_mutex
+
+def hold_until_transfered():
+    transfered =False
+
+    while not transfered:
+        transfered = os.path.exists(PathBuilder(session['current_path']) + session['file_to_download'])
+
+
 @app.before_request
 def before_request():
     if request.url.startswith('http://'):
@@ -51,6 +65,7 @@ def file_browser():
         new_dir = name
         session['current_path'] = PathBuilder(session['current_path']) + name
     elif tp == 'file':
+        get_file_transfer_mutex().acquire()
         print(tp)
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
         print(2)
@@ -61,10 +76,13 @@ def file_browser():
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
     dirs = [d.decode('utf-8') for d in dirs]
     files = [f.decode('utf-8') for f in files]
+    get_file_transfer_mutex().release()
     return render_template("file_browser.html",dirs = dirs,files=files)
 @app.route("/download_file")
 @login_required
 def download_file():
+    get_file_transfer_mutex().acquire()
+    hold_until_transfered()
     print('file_to_download' in session)
     print(session['file_to_download'])
     if 'file_to_download' in session and session['file_to_download'] is not None:
@@ -73,7 +91,9 @@ def download_file():
         session['file_to_download'] = None
         email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
         fpath = "/{email_hash}/storage".format(email_hash=email_hash)
+        get_file_transfer_mutex().release()
         return send_from_directory(fpath,f,as_attachment=True)
+    get_file_transfer_mutex().release()
 
 @app.route("/login",methods=['POST','GET'])
 def login():
