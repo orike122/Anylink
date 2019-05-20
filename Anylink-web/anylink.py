@@ -63,6 +63,8 @@ def file_browser():
 @app.route("/download_file")
 @login_required
 def download_file():
+    print('file_to_download' in session)
+    print(session['file_to_download'])
     if 'file_to_download' in session and session['file_to_download'] is not None:
         print("file approved................")
         f = session['file_to_download']
