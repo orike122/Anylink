@@ -33,6 +33,7 @@ function send_path(type,name) {
         error: function(xhr) {
         //Do Something to handle error
         }
-        console.log('end');
+
     });
+    console.log('end');
 }
