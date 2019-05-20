@@ -55,6 +55,7 @@ def file_browser():
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
         print(2)
         session['file_to_download'] = name
+        print(session['file_to_download'])
     print(name)
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
     dirs = [d.decode('utf-8') for d in dirs]
