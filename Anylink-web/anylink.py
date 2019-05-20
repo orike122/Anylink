@@ -67,7 +67,7 @@ def file_browser():
         new_dir = name
         session['current_path'] = PathBuilder(session['current_path']) + name
     elif tp == 'file':
-        pdb.set_trace()
+        #pdb.set_trace()
         print(tp)
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
         print(2)
