@@ -56,6 +56,7 @@ def file_browser():
         print(2)
         session['file_to_download'] = name
         print(session['file_to_download'])
+    print("current dir....... "+session['current_path'])
     print(name)
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
     dirs = [d.decode('utf-8') for d in dirs]
