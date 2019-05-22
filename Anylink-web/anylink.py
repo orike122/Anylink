@@ -29,6 +29,7 @@ def hold_until_transfered():
         email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
         fpath = "/{email_hash}/storage".format(email_hash=email_hash)
         transfered = os.path.exists(PathBuilder(fpath) + session['file_to_download'])
+        print(transfered)
 
 
 @app.before_request
