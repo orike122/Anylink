@@ -72,6 +72,7 @@ class RequestsManager():
         size += '.' * int((64 - len(size)))
         chan.send(str(size))
         chan.send(file_path)
+        del self.channels[chan]
 
     def send_tree(self,chan,path):
         chan.send(self.SEND_TREE)
