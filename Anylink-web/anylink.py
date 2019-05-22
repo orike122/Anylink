@@ -72,6 +72,7 @@ def file_browser():
         hold_until_transfered()
 
     logging.info("Got file tree request for: {path}".format(path=session['current_path']))
+    logging.info("Current chan: {chan}".format(chan=chans[0]))
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
     dirs = [d.decode('utf-8') for d in dirs]
     files = [f.decode('utf-8') for f in files]
