@@ -74,16 +74,24 @@ class RequestsManager():
         chan.send(file_path)
 
     def send_tree(self,chan,path):
+
         chan.send(self.SEND_TREE)
+        logging.debug("TREE:tree request sent")
         size = len(path)
         size = str(size)
         size += '.' * int((64 - len(size)))
         chan.send(str(size))
+        logging.debug("TREE:tree size sent")
         chan.send(path)
+        logging.debug("TREE:tree path sent")
+        logging.debug("TREE:waiting for size")
         size = chan.recv(64)
+        logging.debug("TREE:got size")
         size = size.decode('utf-8')
         size = size.replace('.','')
+        logging.debug("TREE:wating for tree")
         raw_tree = chan.recv(int(size))
+        logging.debug("TREE:got tree")
         dirs,files = pickle.loads(raw_tree)
         return dirs,files
 
