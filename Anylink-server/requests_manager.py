@@ -76,6 +76,7 @@ class RequestsManager():
         size = size.decode('utf-8')
         size = size.replace('.','')
         msg = chan.recv(int(size))
+        logging.debug("Message recived: {msg}".format(msg=msg))
         if msg == "finishfile":
             return True
 
