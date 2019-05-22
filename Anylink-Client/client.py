@@ -59,6 +59,15 @@ class Client():
             self.status = 3
         else:
             print("control connection failure.............")
+    def reopen_control(self):
+        self.control_chan = self.transport.open_session()
+        self.control_chan.send(self.READY)
+        data = self._control_recv(self._size(self.CONFIRM_READY))
+        if data == self.CONFIRM_READY:
+            print("connected.........")
+            self.status = 3
+        else:
+            print("control connection failure.............")
 
     def wait_for_request(self):
         data = self._control_recv(self.LISTEN_PACKET_SIZE)
@@ -69,16 +78,22 @@ class Client():
         elif data == self.SEND_FILE:
             self.send_file()
     def send_with_size(self,s):
-        size = self._size(s)
+        size = str(self._size(s))
+        size += '.' * int((64 - len(size)))
         self.control_chan.send(str(size))
         self.control_chan.send(s)
 
     def recv_with_size(self):
-        size = self.control_chan.recv(1024)
-        print(size.decode("utf-8"))
-        return self.control_chan.recv(int(size))
+        size = self.control_chan.recv(64)
+        size = size.decode('utf-8')
+        print(size)
+        size = size.replace('.', '')
+        msg = self.control_chan.recv(int(size))
+        print(msg)
+        return msg
     def send_tree(self):
         path = self.recv_with_size()
+        print(path)
         ls = os.listdir(path)
         dirs = [d for d in ls if os.path.isdir(os.path.join(path,d))]
         files = [f for f in ls if os.path.isfile(os.path.join(path,f))]
@@ -86,8 +101,11 @@ class Client():
         print(files)
         pkl = pickle.dumps((dirs,files))
         self.send_with_size(pkl)
+        print("tree sent")
     def send_file(self):
-        path = self.recv_with_size()
+        path = self.recv_with_size().decode('utf-8')
         self.sftp_client.put(path,"/"+path.split("/")[-1])
+        self.send_with_size("finishfile")
+        print("file sent")
 
 
