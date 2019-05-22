@@ -58,7 +58,7 @@ class RequestsManager():
 
     def get_user_channels(self,email):
         uchans = []
-        logging.debug("Current user channles: {data}".format(data=self.channels))
+        logging.debug("Current user channels: {data}".format(data=self.channels))
         for chan in self.channels:
             if self.channels[chan] == email:
                 uchans.append(chan)
@@ -78,7 +78,6 @@ class RequestsManager():
         chan.send(self.SEND_TREE)
         size = len(path)
         size = str(size)
-        logging.debug("Data recived(size): {data}".format(data=data))
         size += '.' * int((64 - len(size)))
         chan.send(str(size))
         chan.send(path)
