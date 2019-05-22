@@ -29,7 +29,7 @@ class RequestsManager():
     def accept_user_clients(self,user):
         for trans,email in self.transports.items():
             if email == user:
-                channel = trans.accept(timeout=10)
+                channel = trans.accept(timeout=1)
                 if channel is not None:
                     self._initiate_channel(channel,email)
 
@@ -72,7 +72,6 @@ class RequestsManager():
         size += '.' * int((64 - len(size)))
         chan.send(str(size))
         chan.send(file_path)
-        del self.channels[chan]
 
     def send_tree(self,chan,path):
         chan.send(self.SEND_TREE)

@@ -70,8 +70,6 @@ def file_browser():
         session['file_to_download'] = name
         logging.info("Downloading file: {name}".format(name = session['file_to_download']))
         hold_until_transfered()
-        get_requests_manager().accept_user_clients(session['user'])
-        chans = get_requests_manager().get_user_channels(session['user'])
 
     logging.info("Got file tree request for: {path}".format(path=session['current_path']))
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
