@@ -70,6 +70,7 @@ def file_browser():
         #pdb.set_trace()
         print(tp)
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
+        hold_until_transfered()
         print(2)
         session['file_to_download'] = name
         print(session['file_to_download'])
@@ -84,7 +85,7 @@ def file_browser():
 @app.route("/download_file")
 @login_required
 def download_file():
-    hold_until_transfered()
+    #hold_until_transfered()
     print('file_to_download' in session)
     print(session['file_to_download'])
     if 'file_to_download' in session and session['file_to_download'] is not None:
