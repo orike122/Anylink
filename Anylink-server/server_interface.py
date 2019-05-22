@@ -2,7 +2,7 @@ import paramiko
 import sys
 import os
 import posixpath
-import server
+import logging
 
 class SFTPServerInterface(paramiko.SFTPServerInterface):
 
@@ -46,26 +46,20 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
 
     def open(self, sftp_path, flags, attr):
         local_path = self._local_path(sftp_path)
-        print(local_path)
         handle = paramiko.SFTPHandle()
         readfile = None
         writefile = None
-        print(flags)
         if flags & os.O_WRONLY:
-            print("write")
             writefile = open(local_path, "wb")
 
         elif flags & os.O_RDWR:
-            print("readwrite")
             readfile = open(local_path, "rb")
-            print("readwrite2")
             writefile = open(local_path, "wb")
         else:
             readfile = open(local_path,"rb")
 
         handle.readfile = readfile
         handle.writefile = writefile
-
-        print("open....")
+        logging.info("File was opened in: {path}".format(path=local_path))
         return handle
 

@@ -2,6 +2,7 @@ import os
 import hashlib
 import pickle
 import threading
+import logging
 class RequestsManager():
     READY = "ready"
     CONFIRM_READY = "confready"
@@ -37,7 +38,7 @@ class RequestsManager():
     def _initiate_channel(self,channel,email):
         data = channel.recv(40)
         data = data.decode("utf-8")
-        print(data)
+        logging.debug("Data recived: {data}".format(data=data))
         if data == self.READY:
             channel.send(self.CONFIRM_READY)
             self.channels[channel] = email
@@ -48,7 +49,7 @@ class RequestsManager():
         self.channels[user] = self.handler_class.users[user].accept()
         data = self.channels[user].recv(40)
         data = data.decode("utf-8")
-        print(data)
+        logging.debug("Data recived: {data}".format(data=data))
         if data == self.READY:
             self.channels[user].send(self.CONFIRM_READY)
         else:
@@ -57,8 +58,7 @@ class RequestsManager():
 
     def get_user_channels(self,email):
         uchans = []
-        print(self.channels)
-        print(type(self.channels))
+        logging.debug("Current user channles: {data}".format(data=self.channels))
         for chan in self.channels:
             if self.channels[chan] == email:
                 uchans.append(chan)
@@ -78,7 +78,7 @@ class RequestsManager():
         chan.send(self.SEND_TREE)
         size = len(path)
         size = str(size)
-        print(size)
+        logging.debug("Data recived(size): {data}".format(data=data))
         size += '.' * int((64 - len(size)))
         chan.send(str(size))
         chan.send(path)
@@ -87,7 +87,5 @@ class RequestsManager():
         size = size.replace('.','')
         raw_tree = chan.recv(int(size))
         dirs,files = pickle.loads(raw_tree)
-        print(dirs)
-        print(files)
         return dirs,files
 

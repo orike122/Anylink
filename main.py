@@ -7,16 +7,16 @@ import threading
 from requests_manager import RequestsManager
 from account_manager import AccountManager
 import anylink
+import logging
 
 def main():
-
-    print("config...")
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+    logging.info("Starting server")
     config = Configuration("/home/orikeidar01/config.json","anylink")
     config.database.set_default_table("anylink")
-    print("initialize server...")
     AnylinkServer.allow_reuse_address = True
     server = AnylinkServer(config.bind_addr, config = config)
-    print("serving...")
+    logging.info("Server is now serving")
     try:
         sftp_thread = threading.Thread(target=server.serve_forever)
         sftp_thread.start()

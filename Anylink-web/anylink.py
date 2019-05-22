@@ -5,7 +5,7 @@ from utils import PathBuilder
 import hashlib
 from threading import Lock
 import os
-import pdb
+import logging
 
 
 app = Flask(__name__,static_url_path='/static')
@@ -24,12 +24,12 @@ def get_file_transfer_mutex():
 
 def hold_until_transfered():
     transfered =False
-
+    logging.info("Waiting for file to be transfered")
     while not transfered:
         email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
         fpath = "/{email_hash}/storage".format(email_hash=email_hash)
         transfered = os.path.exists(PathBuilder(fpath) + session['file_to_download'])
-        print(transfered)
+    logging.info("File successfully transfered")
 
 
 @app.before_request
@@ -52,7 +52,6 @@ def login_required(f):
 def home():
     get_requests_manager().accept_user_clients(session['user'])
     chans = get_requests_manager().get_user_channels(session['user'])
-    print(chans[0].getpeername())
     return render_template("home.html",chans=chans)
 
 @app.route("/file_browser")
@@ -61,40 +60,30 @@ def file_browser():
     chans = get_requests_manager().get_user_channels(session['user'])
     req = request.args.get('jsdata')
     tp,name = req.split(',')
-    print(tp,name)
+    logging.info("File browser got request for {type}: {name}".format(type=tp,name=name))
     if tp == 'back':
-        print(tp)
         session['current_path'] = PathBuilder(session['current_path']) - 1
     elif tp == 'dir':
-        print(tp)
-        new_dir = name
         session['current_path'] = PathBuilder(session['current_path']) + name
     elif tp == 'file':
-        #pdb.set_trace()
-        print(tp)
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
-
-        print(2)
         session['file_to_download'] = name
-        print(session['file_to_download'])
+        logging.info("Downloading file: {name}".format(name = session['file_to_download']))
         hold_until_transfered()
         get_requests_manager().accept_user_clients(session['user'])
         chans = get_requests_manager().get_user_channels(session['user'])
-    print("current dir....... "+session['current_path'])
-    print(name)
+
+    logging.info("Got file tree request for: {path}".format(path=session['current_path']))
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
     dirs = [d.decode('utf-8') for d in dirs]
     files = [f.decode('utf-8') for f in files]
-
+    logging.info("Successfully obtain file tree")
     return render_template("file_browser.html",dirs = dirs,files=files)
 @app.route("/download_file")
 @login_required
 def download_file():
-    #hold_until_transfered()
-    print('file_to_download' in session)
-    print(session['file_to_download'])
     if 'file_to_download' in session and session['file_to_download'] is not None:
-        print("file approved................")
+        logging.info("Found download file")
         f = session['file_to_download']
         session['file_to_download'] = None
         email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()

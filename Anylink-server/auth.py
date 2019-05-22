@@ -1,6 +1,7 @@
 import base64
 
 import paramiko
+import logging
 class Authorization(paramiko.ServerInterface):
 
 
@@ -18,30 +19,25 @@ class Authorization(paramiko.ServerInterface):
     def check_auth_password(self, email, password):
         user = self.database.search_database(email)
         if user is not None:
-            print("user in records...")
+            logging.info("User's email is valid: {user}".format(user=email))
             pwhash = user["password_hash"]
             if password.lower() == pwhash.lower():
-                print("user passwd is wrong...")
+                logging.info("Failed to auhenticate user: {user}".format(user=email))
                 return paramiko.AUTH_FAILED
         else:
-            print("user not in records...")
+            logging.info("User's email is not valid: {user}".format(user=email))
             return paramiko.AUTH_FAILED
-        print("user auth successful...")
+        logging.info("User successfully authenticated: {user}".format(user=email))
         self._set_auth_method(user)
         return paramiko.AUTH_SUCCESSFUL
 
     def check_auth_publickey(self, email, key):
-        print("check key....")
         user = self.database.search_database(email)
         if user is not None:
-            print("get keys....")
             auth_keys = Authorization._get_auth_keys(user)
             if key in auth_keys:
-                print("set user....")
                 self._set_auth_method(user)
-                print("succ....")
                 return paramiko.AUTH_SUCCESSFUL
-        print("fail....")
         return paramiko.AUTH_FAILED
 
     def check_channel_request(self, kind, chanid):
