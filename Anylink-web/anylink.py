@@ -66,10 +66,12 @@ def file_browser():
     elif tp == 'dir':
         session['current_path'] = PathBuilder(session['current_path']) + name
     elif tp == 'file':
-        get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
+        res = get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
+        if not res:
+            return
+
         session['file_to_download'] = name
         logging.info("Downloading file: {name}".format(name = session['file_to_download']))
-        hold_until_transfered()
 
     logging.info("Got file tree request for: {path}".format(path=session['current_path']))
     logging.info("Current chan: {chan}".format(chan=chans[0]))

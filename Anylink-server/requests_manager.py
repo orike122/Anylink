@@ -72,6 +72,14 @@ class RequestsManager():
         size += '.' * int((64 - len(size)))
         chan.send(str(size))
         chan.send(file_path)
+        size = chan.recv(64)
+        size = size.decode('utf-8')
+        size = size.replace('.','')
+        msg = chan.recv(int(size))
+        if msg == "finishfile":
+            return True
+
+        return False
 
     def send_tree(self,chan,path):
 
