@@ -28,7 +28,7 @@ class RequestsManager():
     def accept_user_clients(self,user):
         for trans,email in self.transports.items():
             if email == user:
-                channel = trans.accept(timeout=1)
+                channel = trans.accept(timeout=10)
                 if channel is not None:
                     self._initiate_channel(channel,email)
 
