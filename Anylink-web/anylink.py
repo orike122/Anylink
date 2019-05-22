@@ -70,10 +70,11 @@ def file_browser():
         #pdb.set_trace()
         print(tp)
         get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
-        hold_until_transfered()
+
         print(2)
         session['file_to_download'] = name
         print(session['file_to_download'])
+        hold_until_transfered()
 
     print("current dir....... "+session['current_path'])
     print(name)
