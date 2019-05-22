@@ -78,7 +78,8 @@ def file_browser():
         session['file_to_download'] = name
         print(session['file_to_download'])
         hold_until_transfered()
-
+        get_requests_manager().accept_user_clients(session['user'])
+        chans = get_requests_manager().get_user_channels(session['user'])
     print("current dir....... "+session['current_path'])
     print(name)
     dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
