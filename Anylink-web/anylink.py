@@ -26,7 +26,9 @@ def hold_until_transfered():
     transfered =False
 
     while not transfered:
-        transfered = os.path.exists(PathBuilder(session['current_path']) + session['file_to_download'])
+        email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
+        fpath = "/{email_hash}/storage".format(email_hash=email_hash)
+        transfered = os.path.exists(PathBuilder(fpath) + session['file_to_download'])
 
 
 @app.before_request
