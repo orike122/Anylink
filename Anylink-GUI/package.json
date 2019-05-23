@@ -1,0 +1,17 @@
+{
+  "name": "anylink-gui",
+  "version": "1.0.0",
+  "description": "Anylink User Program for Desktop",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "Anylink"
+  ],
+  "author": "Ori Keidar",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^5.0.2"
+  }
+}
