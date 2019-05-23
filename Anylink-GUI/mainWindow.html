@@ -2,8 +2,45 @@
 <html lang="en">
 <head>
     <title>Welcome to anylink</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-   <p>hello!</p> 
+    <nav style="background-color:mediumseagreen" class="nav-extended">
+        <div  class="nav-wrapper">
+            <a style="font-family: 'Fredoka One', cursive; color: #fff;"class="brand-logo center">anylink</a>
+        </div>
+        <div class="nav-content">
+            <ul id="navtabs" class="tabs tabs-transparent">
+                <li id="intro" class="tab"><a class="active">Intro</a></li>
+                <li id="login" class="tab"><a>Login</a></li>
+                <li id="keys" class="tab"><a>Generate Keys</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div id="content"></div>
+    <script>M.AutoInit()</script>
+    <script>
+        var elem = $("#navtabs");
+        $("#content").load("intro.html");
+        elem.on('click', 'a', function(e) {
+            var tab = M.Tabs.getInstance(elem);
+            console.log(tab.index);
+            if(tab.index == 1){
+                $("#content").empty();
+                $("#content").load("login.html");
+            }
+            else if(tab.index == 0){
+                $("#content").empty();
+                $("#content").load("intro.html");
+            }
+            else if(tab.index == 2){
+                $("#content").empty();
+                $("#content").load("generate.html");
+            }
+        });
+    </script>
 </body>
 </html>
