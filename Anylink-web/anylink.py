@@ -62,7 +62,7 @@ def settings():
         email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
         filename = "/{email_hash}/ssh/authorized_keys".format(email_hash=email_hash)
         with open(filename,"a") as f:
-            f.write(key)
+            f.write(key+"\n")
     return render_template("settings.html")
 
 @app.route("/file_browser")
