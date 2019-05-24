@@ -10,8 +10,8 @@ def main():
         port = json_handle["port"]
     client = Client((ip, port))
     email,pkey_path = read_reg()
-    pkey = paramiko.RSAKey.from_private_key_file(os.path.join(pkey_path,'key'))
-    if email is not None and pkey is not None:
+    if email is not None and pkey_path is not None:
+        pkey = paramiko.RSAKey.from_private_key_file(os.path.join(pkey_path, 'key'))
         client.connect(email,pkey)
         client.start_client()
     else:
