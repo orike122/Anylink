@@ -12,6 +12,7 @@
   "author": "Ori Keidar",
   "license": "MIT",
   "dependencies": {
-    "electron": "^5.0.2"
+    "electron": "^5.0.2",
+    "regedit": "^3.0.2"
   }
 }
