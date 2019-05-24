@@ -115,6 +115,16 @@ def login():
             error = 'login failed!'
     return render_template('login.html',error=error)
 
+@app.route("/signup",methods=['POST','GET'])
+def signup():
+    error = None
+    if request.method == 'POST':
+        if create_user(request.form['username'],
+                       request.form['password']):
+            return redirect(url_for('login'))
+        else:
+            error = 'registration failed: email already exists'
+    return render_template('signup.html',error=error)
 @app.route("/logout")
 @login_required
 def logout():
@@ -123,7 +133,8 @@ def logout():
 
 def validate_login(username,password):
     return get_account_manager().validate_user(username,password)
-
+def create_user(email,passwordh):
+    return get_account_manager().create_user(email,passwordh)
 
 def start_website(r_manager,a_manager):
     global request_manager,account_manager
