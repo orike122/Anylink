@@ -66,6 +66,19 @@ function check_reg(callback){
         callback(key_path,has_init);
     });
 }
+function write_user_reg(user){
+    var val = {
+        'HKCU\\SOFTWARE\\Anylink': {
+            'has_init': {
+                value: user,
+                type: 'REG_SZ'
+            }
+        }
+    };
+    regedit.putValue(val,function(err){
+        if(err) console.log(err);
+    });
+}
 function set_has_init(num){
     var val = {
         'HKCU\\SOFTWARE\\Anylink': {
@@ -110,6 +123,7 @@ ipcMain.on('cred:submit',function(e,cred){
                 if(body.valid){
                     isLoggedIn = true;
                     mainWindow.webContents.send("tab:enable");
+                    write_user_reg(cred.email);
                 }
                 else{
                     isLoggedIn = false;
