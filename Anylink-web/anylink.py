@@ -115,6 +115,14 @@ def login():
             error = 'login failed!'
     return render_template('login.html',error=error)
 
+@app.route("/validate_user",methods=['POST'])
+def validate_user():
+    json = {'valid':False}
+    if validate_login(request.json['email'],
+                      request.json['passh']):
+        json['valid'] = True
+    return jsonify(json)
+
 @app.route("/signup",methods=['POST','GET'])
 def signup():
     error = None
