@@ -54,6 +54,17 @@ def home():
     chans = get_requests_manager().get_user_channels(session['user'])
     return render_template("home.html",chans=chans)
 
+@app.route("/",methods=['GET','PORT'])
+@login_required
+def settings():
+    if request.method == "POST":
+        key = request.form['key']
+        email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
+        filename = "/{email_hash}/ssh/authorized_keys".format(email_hash=email_hash)
+        with open(filename,"a") as f:
+            f.write(key)
+    return render_template("settings.html")
+
 @app.route("/file_browser")
 @login_required
 def file_browser():
