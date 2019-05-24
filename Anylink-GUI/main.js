@@ -3,33 +3,21 @@ const regedit = require('regedit');
 const fs = require('fs');
 const path = require('path');
 const forge = require('node-forge');
-
-const {app,BrowserWindow,Menu} = electron;
-let isLoggedIn = false;
+const request = require('request');
+const {app,BrowserWindow,Menu,ipcMain} = electron;
+var isLoggedIn = false;
 let mainWindow;
 
 //Listen for app ready
 app.on('ready',function(){
-    check_reg(function(key_path,has_init){
-        if(has_init){
-            var pub_key = fs.readFileSync(path.join(key_path,'key.pub'));
-        }
-        else{
-            var pair = forge.pki.rsa.generateKeyPair(2048);
-            var pub_key = forge.ssh.publicKeyToOpenSSH(pair.publicKey);
-            var pkey = forge.ssh.privateKeyToOpenSSH(pair.privateKey);
-            console.log(pub_key);
-            console.log(pkey);
-            fs.writeFileSync(path.join(key_path,'key.pub'),pub_key);
-            fs.writeFileSync(path.join(key_path,'key'),pkey);
-            set_has_init(1);
-        }
-    });
     //Create new window
     mainWindow = new BrowserWindow({
         width: 400,
         height: 500,
-        resizable: false
+        resizable: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
     //Load window's HTML page
     mainWindow.loadFile('mainWindow.html');
@@ -91,3 +79,39 @@ function set_has_init(num){
         if(err) console.log(err);
     });
 }
+ipcMain.on('key:open',function(e){
+    if(isLoggedIn){
+        check_reg(function(key_path,has_init){
+            if(has_init){
+                var pub_key = fs.readFileSync(path.join(key_path,'key.pub'));
+            }
+            else{
+                var pair = forge.pki.rsa.generateKeyPair(2048);
+                var pub_key = forge.ssh.publicKeyToOpenSSH(pair.publicKey);
+                var pkey = forge.ssh.privateKeyToOpenSSH(pair.privateKey);
+                fs.writeFileSync(path.join(key_path,'key.pub'),pub_key);
+                fs.writeFileSync(path.join(key_path,'key'),pkey);
+                set_has_init(1);
+            }
+            mainWindow.webContents.send("key:expose",pub_key);
+        });
+    }
+});
+ipcMain.on('cred:submit',function(e,cred){
+    request.post(
+        'https://anylinknow.tk/validate_user',
+        {json:{
+            email: cred.email,
+            passh: cred.passh
+        },
+        function(error,response,body){
+            var data = response.toJSON();
+            console.log("hi");
+            isLoggedIn = true;
+            
+        }}
+    );
+    console.log("hi");
+    isLoggedIn = true
+    mainWindow.webContents.send("tab:enable");
+});
