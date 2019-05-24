@@ -69,7 +69,7 @@ function check_reg(callback){
 function write_user_reg(user){
     var val = {
         'HKCU\\SOFTWARE\\Anylink': {
-            'has_init': {
+            'user': {
                 value: user,
                 type: 'REG_SZ'
             }
