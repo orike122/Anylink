@@ -2,6 +2,7 @@ from client import Client
 import json
 import winreg
 import paramiko
+import os
 def main():
     with open("config.json","r") as f:
         json_handle = json.load(f)
@@ -9,7 +10,7 @@ def main():
         port = json_handle["port"]
     client = Client((ip, port))
     email,pkey_path = read_reg()
-    pkey = paramiko.RSAKey.from_private_key_file(pkey_path)
+    pkey = paramiko.RSAKey.from_private_key_file(os.path.join(pkey_path,'key'))
     if email is not None and pkey is not None:
         client.connect(email,pkey)
         client.start_client()
