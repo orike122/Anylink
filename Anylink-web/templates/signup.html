@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="static/css/theme.css?123">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.0.2/sha.js"></script>
+  <script src="static/js/script.js?123"></script>
+</head>
+
+<body class="bg-primary">
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light sticky-top" id="fixednav">
+    <div class="container"> <button class="navbar-toggler navbar-toggler-right border-0 p-0" type="button" data-toggle="collapse" data-target="#navbar20">
+        <p class="navbar-brand text-white mb-0">
+          <i class="fa d-inline fa-lg fa-stop-circle"></i> BRAND </p>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar20">
+        <ul class="navbar-nav col">
+          <li class="nav-item"> <a class="nav-link text-white" href="/">Home</a> </li>
+          <li class="nav-item"> <a class="nav-link text-white" href="/settings">Settings</a> </li>
+          <li class="nav-item"> <a class="nav-link text-white" href="#">About</a> </li>
+        </ul>
+        <p class="d-none d-md-block lead text-white col mb-0 text-center" style=""> <i class="fa d-inline fa-lg fa-link"></i> <b>Anylink</b> </p>
+        <ul class="navbar-nav col justify-content-end px-0">
+          <li class="nav-item mr-0 ml-2 text-primary"><a class="nav-link text-white" href="/login">Login</a></li>
+          <li class="nav-item ml-2 mr-0 text-white"><a class="nav-link text-white" href="/signup" >Sign Up</a>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="py-5" style="">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <div class="card rounded border-primary border text-info">
+            <div class="card-header" style="">Sign Up</div>
+            <div class="card-body">
+              {% if error is not none %}
+              <p style="color:red">{{ error }}</p>
+              {% endif %}
+              <form id="c_form-h" class="" onsubmit="hashpass()" action="" method="POST">
+                <div class="form-group row">
+                  <div class="col-10">
+                    <input type="email" class="form-control" id="inputmailh" placeholder="mail@example.com" required="required" name="username"> </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-10">
+                    <input type="password" class="form-control" id="inputpasswordh" placeholder="Password" required="required" name="password"> </div>
+                </div>
+                <button type="submit" class="btn btn-primary" >Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16"></pingendo>
+</body>
+
+</html>
