@@ -118,6 +118,7 @@ def login():
 @app.route("/validate_user",methods=['POST'])
 def validate_user():
     json = {'valid':False}
+    logging.debug("Validation request: {req}".format(req=request.json))
     if validate_login(request.json['email'],
                       request.json['passh']):
         json['valid'] = True
