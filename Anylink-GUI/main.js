@@ -101,8 +101,8 @@ ipcMain.on('cred:submit',function(e,cred){
     request.post(
         {url: 'https://anylinknow.tk/validate_user',
         json:{
-            email: "hf",
-            passh: "hjj"
+            email: cred.email,
+            passh: cred.passh
         }},
         function(err,response,body){;
             if(err) console.log(err);
