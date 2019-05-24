@@ -99,19 +99,22 @@ ipcMain.on('key:open',function(e){
 });
 ipcMain.on('cred:submit',function(e,cred){
     request.post(
-        'https://anylinknow.tk/validate_user',
-        {json:{
-            email: cred.email,
-            passh: cred.passh
-        },
-        function(error,response,body){
-            var data = response.toJSON();
-            console.log("hi");
-            isLoggedIn = true;
-            
-        }}
-    );
-    console.log("hi");
-    isLoggedIn = true
-    mainWindow.webContents.send("tab:enable");
+        {url: 'https://anylinknow.tk/validate_user',
+        json:{
+            email: "hf",
+            passh: "hjj"
+        }},
+        function(err,response,body){;
+            if(err) console.log(err);
+            if(body){
+                if(body.valid){
+                    isLoggedIn = true;
+                    mainWindow.webContents.send("tab:enable");
+                }
+                else{
+                    isLoggedIn = false;
+                }
+            }
+        });
+    
 });
