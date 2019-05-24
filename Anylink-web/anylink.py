@@ -54,7 +54,7 @@ def home():
     chans = get_requests_manager().get_user_channels(session['user'])
     return render_template("home.html",chans=chans)
 
-@app.route("/settings",methods=['GET','PORT'])
+@app.route("/settings",methods=['GET','POST'])
 @login_required
 def settings():
     if request.method == "POST":
