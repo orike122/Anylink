@@ -1,4 +1,8 @@
 const electron = require('electron');
+const regedit = require('regedit');
+const fs = require('fs');
+const path = require('path');
+const forge = require('node-forge');
 
 const {app,BrowserWindow,Menu} = electron;
 let isLoggedIn = false;
@@ -6,6 +10,21 @@ let mainWindow;
 
 //Listen for app ready
 app.on('ready',function(){
+    check_reg(function(key_path,has_init){
+        if(has_init){
+            var pub_key = fs.readFileSync(path.join(key_path,'key.pub'));
+        }
+        else{
+            var pair = forge.pki.rsa.generateKeyPair(2048);
+            var pub_key = forge.ssh.publicKeyToOpenSSH(pair.publicKey);
+            var pkey = forge.ssh.privateKeyToOpenSSH(pair.privateKey);
+            console.log(pub_key);
+            console.log(pkey);
+            fs.writeFileSync(path.join(key_path,'key.pub'),pub_key);
+            fs.writeFileSync(path.join(key_path,'key'),pkey);
+            set_has_init(1);
+        }
+    });
     //Create new window
     mainWindow = new BrowserWindow({
         width: 400,
@@ -49,4 +68,26 @@ if(process.env.NODE_ENV !== 'production'){
             ]
         },
     );
+}
+function check_reg(callback){
+    regedit.list(['HKCU\\SOFTWARE\\Anylink'], function(lserr,result){
+        if(lserr) console.log(lserr);
+        var res = result['HKCU\\SOFTWARE\\Anylink'];
+        key_path = res.values['key_path'].value;
+        has_init = res.values['has_init'].value;
+        callback(key_path,has_init);
+    });
+}
+function set_has_init(num){
+    var val = {
+        'HKCU\\SOFTWARE\\Anylink': {
+            'has_init': {
+                value: num,
+                type: 'REG_DWORD'
+            }
+        }
+    };
+    regedit.putValue(val,function(err){
+        if(err) console.log(err);
+    });
 }
