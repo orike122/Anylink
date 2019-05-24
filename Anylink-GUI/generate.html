@@ -23,6 +23,7 @@
     var key_textarea = document.querySelector("#pub_key");
     ipcRenderer.on('key:expose', function(e,key){
         var key_text = document.createTextNode(key);
+        key_textarea.innerHTML = '';
         key_textarea.appendChild(key_text);
         M.textareaAutoResize($('#pub_key'));
     });
