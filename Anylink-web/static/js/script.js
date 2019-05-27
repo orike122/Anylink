@@ -1,5 +1,9 @@
+sessionStorage.setItem("id", undefined);
 function set_id(new_id){
     sessionStorage.setItem("id", new_id);
+}
+function set_client_listener(){
+    document.querySelector('')
 }
 function hashpass() {
   var pwdObj = document.getElementById('inputpasswordh');
