@@ -1,3 +1,7 @@
+var id;
+function set_id(new_id){
+    id = new_id;
+}
 function hashpass() {
   var pwdObj = document.getElementById('inputpasswordh');
   var hashObj = new jsSHA("SHA-256", "TEXT", {numRounds: 1});
@@ -12,7 +16,7 @@ function send_path(type,name) {
     $.ajax({
         url: "/file_browser",
         type: "get",
-        data: {jsdata: type+','+name},
+        data: {jsdata: type+','+name+','+id},
         success: function(response) {
             console.log('success');
             console.log(type);
@@ -36,4 +40,22 @@ function send_path(type,name) {
 
     });
     console.log('end');
+
+function get_clients() {
+    $.ajax({
+        url: "/get_clients",
+        type: "get",
+        success: function(response) {
+            console.log('success');
+            $("#devs").html(response);
+            }
+        },
+        error: function(xhr) {
+            if(whr) console.log(xhr);
+        }
+
+    });
+    console.log('end');
+
+
 }
