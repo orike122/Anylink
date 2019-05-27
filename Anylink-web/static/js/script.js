@@ -1,6 +1,5 @@
-var id;
 function set_id(new_id){
-    id = new_id;
+    sessionStorage.setItem("id", new_id);
 }
 function hashpass() {
   var pwdObj = document.getElementById('inputpasswordh');
@@ -13,6 +12,7 @@ function hashpass() {
 }
 
 function send_path(type,name) {
+    var id = sessionStorage.getItem("id");
     $.ajax({
         url: "/file_browser",
         type: "get",

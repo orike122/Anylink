@@ -82,6 +82,7 @@ def file_browser():
     chans = get_requests_manager().get_user_channels(session['user'])
     req = request.args.get('jsdata')
     tp,name,id = req.split(',')
+    id = int(id)
     chan = get_chan_by_id(chans,id)
     if 'current_client' not in session or session['current_client'] is None:
         session['current_client'] = id
