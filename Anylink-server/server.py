@@ -5,10 +5,11 @@ from server_interface import SFTPServerInterface
 from config import Configuration
 from socket import socket
 import logging
+import typing
 
 class AnylinkServer(socketserver.ThreadingTCPServer):
     """Anylink Server, implementing a threading tcp server for SFTP"""
-    def __init__(self,addr :tuple,config: Configuration):
+    def __init__(self,addr :typing.Tuple[str,int],config: Configuration):
         """
         C'tor for Anylink Server, threading tcp server for SFTP file transfer
         :param addr: server's bind address
@@ -56,20 +57,18 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         """
         self._auth_user = user
 
-    def _get_auth_user(self):
+    def _get_auth_user(self) -> typing.Dict[str,str]:
         """
         returns the authorized user
         :return: authorized user
-        :rtype: dict
         """
         return self._auth_user
 
-    def make_transport(self,sock: socket):
+    def make_transport(self,sock: socket) -> paramiko.Transport:
         """
         Creates an SSH transport between the server and the client over a given socket
         :param sock: socket on which to create the transport
         :return: SSH trnasport
-        :rtype: paramiko.Transport
         """
         return paramiko.Transport(sock)
 
