@@ -48,7 +48,6 @@ function get_clients() {
         success: function(response) {
             console.log('success');
             $("#devs").html(response);
-            }
         },
         error: function(xhr) {
             if(whr) console.log(xhr);
