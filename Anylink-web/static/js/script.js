@@ -50,7 +50,7 @@ function get_clients() {
             $("#devs").html(response);
         },
         error: function(xhr) {
-            if(whr) console.log(xhr);
+            if(xhr) console.log(xhr);
         }
 
     });
