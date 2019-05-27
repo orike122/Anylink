@@ -60,7 +60,7 @@ function get_clients() {
     });
     console.log('end');
     var id = sessionStorage.getItem("id");
-    if(!document.querySelector("#"+id+"devli")){
+    if(!document.querySelector("#"+CSS.escape(id)+"devli")){
         $("#file_browser").empty();
         sessionStorage.setItem("id", undefined);
     }
