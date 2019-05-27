@@ -40,7 +40,7 @@ function send_path(type,name) {
 
     });
     console.log('end');
-
+}
 function get_clients() {
     $.ajax({
         url: "/get_clients",
