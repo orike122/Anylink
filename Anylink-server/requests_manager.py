@@ -60,8 +60,8 @@ class RequestsManager():
         uchans = []
         logging.debug("Current user channels: {data}".format(data=self.channels))
         for chan in self.channels:
-            if not self.channels[chan].get_transport().active:
-                self.channels[chan].get_transport().close()
+            if not chan.get_transport().active:
+                chan.get_transport().close()
             if self.channels[chan] == email:
                 uchans.append(chan)
         return uchans
