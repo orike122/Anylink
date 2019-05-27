@@ -62,6 +62,7 @@ class RequestsManager():
         for chan in self.channels:
             if not chan.get_transport().active:
                 chan.get_transport().close()
+                del self.channels[chan]
             if self.channels[chan] == email:
                 uchans.append(chan)
         return uchans
