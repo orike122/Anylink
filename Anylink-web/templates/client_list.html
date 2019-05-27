@@ -3,7 +3,7 @@
 </li>
 {% for chan in chans %}
 <li class="list-group-item list-group-item-action">
-<input id='{{ loop.index }}dev' name="dir" type="button" style="bacolor: yellow" onclick="send_id({{ chan.get_id() }})">
+<input id='{{ loop.index }}dev' name="dir" type="button" style="bacolor: yellow" onclick="set_id({{ chan.get_id() }})">
 <label for='{{ loop.index }}dev'>{{ chan.getpeername()[0] }}</label>
 </li>
 {% endfor %}

@@ -50,9 +50,14 @@ def login_required(f):
 @app.route("/",methods=['GET'])
 @login_required
 def home():
+    return render_template("home.html")
+
+@app.route("/get_clients",methods=['GET'])
+@login_required
+def get_clients():
     get_requests_manager().accept_user_clients(session['user'])
     chans = get_requests_manager().get_user_channels(session['user'])
-    return render_template("home.html",chans=chans)
+    return render_template("client_list.html", chans=chans)
 
 @app.route("/settings",methods=['GET','POST'])
 @login_required
@@ -65,28 +70,45 @@ def settings():
             f.write(key+"\n")
     return render_template("settings.html")
 
+def get_chan_by_id(chans,id):
+    chan = [c for c in chans if c.get_id()==id]
+    if len(chan) == 1:
+        return chan[0]
+    return None
+
 @app.route("/file_browser")
 @login_required
 def file_browser():
     chans = get_requests_manager().get_user_channels(session['user'])
     req = request.args.get('jsdata')
-    tp,name = req.split(',')
-    logging.info("File browser got request for {type}: {name}".format(type=tp,name=name))
-    if tp == 'back':
-        session['current_path'] = PathBuilder(session['current_path']) - 1
-    elif tp == 'dir':
-        session['current_path'] = PathBuilder(session['current_path']) + name
-    elif tp == 'file':
-        res = get_requests_manager().send_file(chans[0],PathBuilder(session['current_path']) + name)
-        if not res:
-            return
+    tp,name,id = req.split(',')
+    chan = get_chan_by_id(chans,id)
+    if 'current_client' not in session or session['current_client'] is None:
+        session['current_client'] = id
+        name = '/'
+        tp = 'dir'
+    elif session['current_client'] != id:
+        session['current_client'] = id
+        name = '/'
+        tp = 'dir'
+    else:
+        if tp == 'back':
+            session['current_path'] = PathBuilder(session['current_path']) - 1
+        elif tp == 'dir':
+            session['current_path'] = PathBuilder(session['current_path']) + name
+        elif tp == 'file':
+            res = get_requests_manager().send_file(chan,PathBuilder(session['current_path']) + name)
+            if not res:
+                return abort(404)
 
-        session['file_to_download'] = name
-        logging.info("Downloading file: {name}".format(name = session['file_to_download']))
+            session['file_to_download'] = name
+            logging.info("Downloading file: {name}".format(name = session['file_to_download']))
 
+
+    logging.info("File browser got request for {type}: {name} at {id}".format(type=tp, name=name, id=id))
     logging.info("Got file tree request for: {path}".format(path=session['current_path']))
-    logging.info("Current chan: {chan}".format(chan=chans[0]))
-    dirs, files = get_requests_manager().send_tree(chans[0], session['current_path'])
+    logging.info("Current chan: {chan}".format(chan=chan))
+    dirs, files = get_requests_manager().send_tree(chan, session['current_path'])
     dirs = [d.decode('utf-8') for d in dirs]
     files = [f.decode('utf-8') for f in files]
     logging.info("Successfully obtain file tree")
