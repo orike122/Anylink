@@ -4,13 +4,19 @@ import paramiko
 
 
 class Configuration():
-
-    def __init__(self,json_path,configuration):
+    """Configuration class for loading configurations"""
+    def __init__(self,json_path: str,configuration: str):
+        """
+        C'tor for Configuration object
+        :param json_path: Path to json configuration file
+        :param configuration: Name of configuration set
+        """
         self.json_path = json_path
         self.conf = configuration
         self.load()
 
     def load(self):
+        """Loads host keys and database"""
         with open(self.json_path,"r") as json_file:
             json_handle = json.load(json_file)
             listen_port = json_handle[self.conf]["listen_port"]
