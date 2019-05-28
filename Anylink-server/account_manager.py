@@ -1,11 +1,11 @@
-
 import os
 from database import Database
+
 
 class AccountManager():
     """AccountManager class, thin wrapper of Database that adds functionality and handles user sign up/ip operations"""
 
-    def __init__(self,database: Database):
+    def __init__(self, database: Database):
         """
         C'tor of AccountManager class
         :param database: Database object
@@ -27,7 +27,7 @@ class AccountManager():
         os.mkdir(storage_dir)
         open('/{email_hash}/ssh/authorized_keys'.format(email_hash=email_hash), 'a').close()
 
-    def create_user(self,email: str,passwordh: str) -> bool:
+    def create_user(self, email: str, passwordh: str) -> bool:
         """
         Creates a new user with given email and passowrd hash
         :param email: User's email
@@ -36,13 +36,13 @@ class AccountManager():
         """
         res = self.database.search_database(email)
         if res is None:
-            self.database.add_user(email,passwordh)
+            self.database.add_user(email, passwordh)
             user = self.database.search_database(email)
             self._create_dir_structure(user["email_hash"])
             return True
         return False
 
-    def validate_user(self,email: str,password: str) -> bool:
+    def validate_user(self, email: str, password: str) -> bool:
         """
         Validates user credentials
         :param email: User's email
@@ -54,5 +54,3 @@ class AccountManager():
             return True
         else:
             return False
-
-

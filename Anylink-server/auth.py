@@ -5,6 +5,7 @@ from database import Database
 import types
 import typing
 
+
 class Authorization(paramiko.ServerInterface):
     """Class for authorizing SFTP requests"""
 
@@ -34,7 +35,7 @@ class Authorization(paramiko.ServerInterface):
         """
         return paramiko.AUTH_FAILED
 
-    def check_auth_password(self, email: str, password: str) ->int:
+    def check_auth_password(self, email: str, password: str) -> int:
         """
         Trys to authorized with password auth
         :param email: User's email
@@ -55,7 +56,7 @@ class Authorization(paramiko.ServerInterface):
         self._set_auth_method(user)
         return paramiko.AUTH_SUCCESSFUL
 
-    def check_auth_publickey(self, email: str, key: str) ->int:
+    def check_auth_publickey(self, email: str, key: str) -> int:
         """
         Trys to authorized with publickey auth
         :param email: User's email
@@ -83,7 +84,7 @@ class Authorization(paramiko.ServerInterface):
         :return: a list of user's public keys
         """
         authorized_keys = []
-        filename = "/{email_hash}/ssh/authorized_keys".format(email_hash = user["email_hash"])
+        filename = "/{email_hash}/ssh/authorized_keys".format(email_hash=user["email_hash"])
         for rawline in open(filename, 'r'):
             line = rawline.strip()
             if not line or line.startswith("#"):
@@ -104,6 +105,3 @@ class Authorization(paramiko.ServerInterface):
                 del d
                 authorized_keys.append(k)
         return authorized_keys
-
-
-

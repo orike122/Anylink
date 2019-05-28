@@ -7,18 +7,20 @@ from socketserver import BaseRequestHandler
 import typing
 import paramiko
 
+
 class RequestsManager():
     """A class for creating requests for the client and manage control messages protocol"""
-    #----------Constants----------
+    # ----------Constants----------
     READY = "ready"
     CONFIRM_READY = "confready"
     SEND_KEY = "sendkey"
     SEND_FILE = "sendfile"
     SEND_TREE = "sendtree"
     KEY_SENT = "keysent"
+
     # ----------------------------
 
-    def __init__(self,handler_class: typing.Type[BaseRequestHandler]):
+    def __init__(self, handler_class: typing.Type[BaseRequestHandler]):
         """
         C'tor RequestsManager
         :param handler_class: class of request handler
@@ -26,34 +28,35 @@ class RequestsManager():
         self.handler_class = handler_class
         self.channels = {}
         self.scan = False
-        self.scan_thread = threading.Thread(target=self._scanning_loop)# Create scaning thread
+        self.scan_thread = threading.Thread(target=self._scanning_loop)  # Create scaning thread
         self.transports = {}
 
     def start_scanning(self):
         """Starts live transport updating thread"""
         self.scan = True
         self.scan_thread.start()
+
     def stop_scanning(self):
         """Stops live transport updating thread"""
         self.scan = False
+
     def _scanning_loop(self):
         """Loop for transport scan thread"""
         while self.scan:
             self.transports = self.handler_class.users
-    def accept_user_clients(self,user: str):
+
+    def accept_user_clients(self, user: str):
         """
         Accepts waiting for connection user clients
         :param user:
         """
-        for trans,email in self.transports.items():
+        for trans, email in self.transports.items():
             if email == user:
                 channel = trans.accept(timeout=1)
                 if channel is not None:
-                    self._initiate_channel(channel,email)
+                    self._initiate_channel(channel, email)
 
-
-
-    def _initiate_channel(self,channel: paramiko.Channel,email: str):
+    def _initiate_channel(self, channel: paramiko.Channel, email: str):
         """
         Initiates channel with given channel object and email
         :param channel: SSH Channel object
@@ -68,7 +71,7 @@ class RequestsManager():
         else:
             channel.close()
 
-    def _create_channel(self,user:str):
+    def _create_channel(self, user: str):
         """
         Do not use! Deprecated! Old _initiate_channel, no longer in use, raises deprecation warning
         :param user: user's email
@@ -84,7 +87,7 @@ class RequestsManager():
             self.channels[user].close()
             del self.channels[user]
 
-    def get_user_channels(self,email: str) -> typing.List[paramiko.Channel]:
+    def get_user_channels(self, email: str) -> typing.List[paramiko.Channel]:
         """
         Returns all channels that is linked with a given user
         :param email: user's email
@@ -100,7 +103,7 @@ class RequestsManager():
                 uchans.append(chan)
         return uchans
 
-    def send_file(self,chan: paramiko.Channel,file_path: str) -> bool:
+    def send_file(self, chan: paramiko.Channel, file_path: str) -> bool:
         """
         Request a "send file" request to the client given a channel and file path
         :param chan: Channel to send the request for
@@ -114,7 +117,7 @@ class RequestsManager():
         chan.send(file_path)
         size = chan.recv(64)
         size = size.decode('utf-8')
-        size = size.replace('.','')
+        size = size.replace('.', '')
         msg = chan.recv(int(size))
         msg = msg.decode('utf-8')
         logging.debug("Message recived: {msg}".format(msg=msg))
@@ -123,7 +126,7 @@ class RequestsManager():
 
         return False
 
-    def send_tree(self,chan: paramiko.Channel,path: str) ->typing.Tuple[list,list]:
+    def send_tree(self, chan: paramiko.Channel, path: str) -> typing.Tuple[list, list]:
         """
         Request a "send tree" request to the client given a channel and path
         :param chan: Channel to send the request for
@@ -143,10 +146,9 @@ class RequestsManager():
         size = chan.recv(64)
         logging.debug("TREE:got size")
         size = size.decode('utf-8')
-        size = size.replace('.','')
+        size = size.replace('.', '')
         logging.debug("TREE:wating for tree")
         raw_tree = chan.recv(int(size))
         logging.debug("TREE:got tree")
-        dirs,files = pickle.loads(raw_tree)
-        return dirs,files
-
+        dirs, files = pickle.loads(raw_tree)
+        return dirs, files

@@ -1,18 +1,19 @@
 print("importing...")
 from config import Configuration
-from server import AnylinkServer,SFTPHandler
+from server import AnylinkServer, SFTPHandler
 import threading
 from requests_manager import RequestsManager
 from account_manager import AccountManager
 import readchar
 
+
 def main():
     print("config...")
-    config = Configuration("/home/orikeidar01/config.json","anylink")
+    config = Configuration("/home/orikeidar01/config.json", "anylink")
     config.database.set_default_table("anylink")
     print("initialize server...")
     AnylinkServer.allow_reuse_address = True
-    server = AnylinkServer(config.bind_addr, config = config)
+    server = AnylinkServer(config.bind_addr, config=config)
     print("serving...")
     sftp_thread = threading.Thread(target=server.serve_forever)
     sftp_thread.start()
@@ -28,7 +29,8 @@ def main():
         print("4) create new user")
         print("^C) exit")
         char = None
-        while char is None or (char!='1' and char!='2' and char!='3' and char!='4' and char!=readchar.key.CTRL_C):
+        while char is None or (
+                char != '1' and char != '2' and char != '3' and char != '4' and char != readchar.key.CTRL_C):
             char = readchar.readkey()
 
         if char == '1':
@@ -41,22 +43,18 @@ def main():
             user = input("enter user email: ")
             requests_manager.get_channel(user)
             path = input("enter file path: ")
-            requests_manager.send_file(user,path)
+            requests_manager.send_file(user, path)
         elif char == '4':
             user = input("enter user email: ")
             passwd = input("enter user password: ")
-            if account_manager.create_user(user,passwd):
+            if account_manager.create_user(user, passwd):
                 print("user was succefully created")
             else:
                 print("email already exists")
-        elif char==readchar.key.CTRL_C:
+        elif char == readchar.key.CTRL_C:
             exit = True
 
     server.shutdown()
-
-
-
-
 
 
 if __name__ == "__main__":

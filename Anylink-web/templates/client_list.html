@@ -1,9 +1,10 @@
 <li class="list-group-item list-group-item-action active">
-<strong class="text-info">Devices</strong>
+    <strong class="text-info">Devices</strong>
 </li>
 {% for chan in chans %}
 <li id="{{ chan.get_id() }}devli" class="list-group-item list-group-item-action">
-<input id='{{ loop.index }}dev' name="dir" type="button" style="bacolor: yellow" onclick="set_id({{ chan.get_id() }});send_path('dir','/');">
-<label for='{{ loop.index }}dev'>{{ chan.getpeername()[0] }}</label>
+    <input id='{{ loop.index }}dev' name="dir" type="button" style="bacolor: yellow"
+           onclick="set_id({{ chan.get_id() }});send_path('dir','/');">
+    <label for='{{ loop.index }}dev'>{{ chan.getpeername()[0] }}</label>
 </li>
 {% endfor %}

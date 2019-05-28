@@ -8,12 +8,14 @@ import types
 import typing
 import io
 
+
 class SFTPServerInterface(paramiko.SFTPServerInterface):
     """
     SFTP Server Interface, class that overrides
     function that gives access to the file system
     """
-    def __init__(self, server: ThreadingTCPServer,get_user_method: types.FunctionType):
+
+    def __init__(self, server: ThreadingTCPServer, get_user_method: types.FunctionType):
         """
         C'tor for SFTP Server Interface
         :param server: sftp server
@@ -22,7 +24,7 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         self.server = server
         # magic string for base dir generated from email hash
         self._base_dir = "/{email_hash}/storage".format(
-            email_hash = get_user_method()["email_hash"])
+            email_hash=get_user_method()["email_hash"])
 
     def _local_path(self, sftp_path: str) -> str:
         """
@@ -48,17 +50,17 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         assert (os.path.commonprefix((absolute_base_path, lp)) == absolute_base_path)
         return lp
 
-    def list_folder(self,sftp_path: str) -> typing.List[paramiko.SFTPAttributes]:
+    def list_folder(self, sftp_path: str) -> typing.List[paramiko.SFTPAttributes]:
         """
         List folder's content
         :param sftp_path: remote path
         :return: list of elements in folder
         """
-        local_path = self._local_path(sftp_path) # convert path
+        local_path = self._local_path(sftp_path)  # convert path
         retval = []
         for fname in os.listdir(local_path):
-            fpath = os.path.join(local_path,fname)
-            retval.append(paramiko.SFTPAttributes.from_stat(os.lstat(fpath),fname))
+            fpath = os.path.join(local_path, fname)
+            retval.append(paramiko.SFTPAttributes.from_stat(os.lstat(fpath), fname))
         return retval
 
     def stat(self, sftp_path: str) -> paramiko.SFTPAttributes:
@@ -67,9 +69,9 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         :param sftp_path: remote path
         :return: SFTPAttributes for an object in specific path
         """
-        local_path = self._local_path(sftp_path)# convert path
-        fname = os.path.basename(local_path) # extract file name
-        return paramiko.SFTPAttributes.from_stat(os.stat(local_path),fname)
+        local_path = self._local_path(sftp_path)  # convert path
+        fname = os.path.basename(local_path)  # extract file name
+        return paramiko.SFTPAttributes.from_stat(os.stat(local_path), fname)
 
     def lstat(self, sftp_path: str) -> paramiko.SFTPAttributes:
         """
@@ -77,8 +79,8 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         :param sftp_path: remote path
         :return: SFTPAttributes for an object in specific path
         """
-        local_path = self._local_path(sftp_path)# convert path
-        fname = os.path.basename(local_path)# extract file name
+        local_path = self._local_path(sftp_path)  # convert path
+        fname = os.path.basename(local_path)  # extract file name
         return paramiko.SFTPAttributes.from_stat(os.lstat(local_path), fname)
 
     def open(self, sftp_path: str, flags: int, attr: paramiko.SFTPAttributes) -> io.TextIOWrapper:
@@ -101,10 +103,9 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
             readfile = open(local_path, "rb")
             writefile = open(local_path, "wb")
         else:
-            readfile = open(local_path,"rb")
+            readfile = open(local_path, "rb")
 
         handle.readfile = readfile
         handle.writefile = writefile
         logging.info("File was opened in: {path}".format(path=local_path))
         return handle
-
