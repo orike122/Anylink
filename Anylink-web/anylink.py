@@ -3,9 +3,9 @@ from flask_sslify import SSLify
 from functools import wraps
 from utils import PathBuilder
 import hashlib
-from threading import Lock
 import os
 import logging
+import types
 
 
 app = Flask(__name__,static_url_path='/static') #Define static folder path
@@ -14,13 +14,12 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' #Define secret key
 
 sslify = SSLify(app,permanent=True) #SSLify the original app
 
-current_paths = {}
-file_transfer_mutex = Lock()
-def get_file_transfer_mutex():
-    global file_transfer_mutex
-    return file_transfer_mutex
+get_account_manager: types.FunctionType
+get_requests_manager: types.FunctionType
+current_paths = {} #Current user paths
 
 def hold_until_transfered():
+    """Blocks until the file that is currently being transfered, finishes"""
     transfered =False
     logging.info("Waiting for file to be transfered")
     while not transfered:
@@ -32,12 +31,14 @@ def hold_until_transfered():
 
 @app.before_request
 def before_request():
+    """Converts http request to a secured HTTP connection"""
     if request.url.startswith('http://'):
         url = request.url.replace('http://', 'https://', 1)
         code = 301
         return redirect(url, code=code)
 
 def login_required(f):
+    """Wrapper function that requires login for views"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user' not in session:
@@ -48,11 +49,13 @@ def login_required(f):
 @app.route("/",methods=['GET'])
 @login_required
 def home():
+    """View that respones with the home page"""
     return render_template("home.html")
 
 @app.route("/get_clients",methods=['GET'])
 @login_required
 def get_clients():
+    """View that responses with the clients list"""
     get_requests_manager().accept_user_clients(session['user'])
     chans = get_requests_manager().get_user_channels(session['user'])
     return render_template("client_list.html", chans=chans)
@@ -60,6 +63,7 @@ def get_clients():
 @app.route("/settings",methods=['GET','POST'])
 @login_required
 def settings():
+    """View that responses with the settings page"""
     if request.method == "POST":
         key = request.form['key']
         email_hash = hashlib.sha256(session['user'].encode("utf-8")).hexdigest()
@@ -69,6 +73,7 @@ def settings():
     return render_template("settings.html")
 
 def get_chan_by_id(chans,id):
+    """Searches channel from a list of channels by id"""
     chan = [c for c in chans if c.get_id()==id]
     if len(chan) == 1:
         return chan[0]
@@ -77,6 +82,7 @@ def get_chan_by_id(chans,id):
 @app.route("/file_browser")
 @login_required
 def file_browser():
+    """View that responses with the file browser page"""
     chans = get_requests_manager().get_user_channels(session['user'])
     req = request.args.get('jsdata')
     tp,name,id = req.split(',')
@@ -115,6 +121,7 @@ def file_browser():
 @app.route("/download_file")
 @login_required
 def download_file():
+    """View that responses with the downloaded file"""
     if 'file_to_download' in session and session['file_to_download'] is not None:
         logging.info("Found download file")
         f = session['file_to_download']
@@ -125,6 +132,7 @@ def download_file():
 
 @app.route("/login",methods=['POST','GET'])
 def login():
+    """View that responses with the login page"""
     error = None
     if request.method == 'POST':
         if validate_login(request.form['username'],
@@ -138,6 +146,7 @@ def login():
 
 @app.route("/validate_user",methods=['POST'])
 def validate_user():
+    """View that responses with a validation answer"""
     json = {'valid':False}
     logging.debug("Validation request: {req}".format(req=request.json))
     if validate_login(request.json['email'],
@@ -147,6 +156,7 @@ def validate_user():
 
 @app.route("/signup",methods=['POST','GET'])
 def signup():
+    """View that responses with the sign up page"""
     error = None
     if request.method == 'POST':
         if create_user(request.form['username'],
@@ -155,23 +165,34 @@ def signup():
         else:
             error = 'registration failed: email already exists'
     return render_template('signup.html',error=error)
+
 @app.route("/logout")
 @login_required
 def logout():
+    """View that responses with the log out page"""
     session.pop('user',None)
     return redirect(url_for('logout'))
 
-def validate_login(username,password):
+def validate_login(username: str,password: str) -> bool:
+    """
+    Util function for user validation against DB
+    :param username: User's email
+    :param password: User's password hash
+    :return: Is user valid
+    """
     return get_account_manager().validate_user(username,password)
-def create_user(email,passwordh):
+
+def create_user(email: str,passwordh: str) -> bool:
+    """
+    Util function for user validation against DB
+    :param email:  User's email
+    :param passwordh: User's password hash
+    :return: Is user created
+
+    """
     return get_account_manager().create_user(email,passwordh)
 
 def start_website():
+    """Starts flask web server"""
     app.run("0.0.0.0",443,debug=False,ssl_context=('anylinknow.pem','private.pem'))
 
-def get_account_manager():
-    global account_manager
-    return account_manager
-def get_requests_manager():
-    global request_manager
-    return request_manager

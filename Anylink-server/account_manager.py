@@ -32,7 +32,7 @@ class AccountManager():
         Creates a new user with given email and passowrd hash
         :param email: User's email
         :param passwordh: User's password hash
-        :return: Does user creation succeeded
+        :return: Is user creation succeeded
         """
         res = self.database.search_database(email)
         if res is None:
@@ -47,7 +47,7 @@ class AccountManager():
         Validates user credentials
         :param email: User's email
         :param password: User's password hash
-        :return: Does user valid
+        :return: Is user valid
         """
         res = self.database.search_database(email)
         if res is not None and res["password_hash"].lower() == password.lower():
