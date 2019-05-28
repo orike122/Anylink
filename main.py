@@ -24,6 +24,10 @@ def main():
         requests_manager = RequestsManager(SFTPHandler)
         account_manager = AccountManager(config.database)
         requests_manager.start_scanning()
+
+        setattr(anylink,"get_account_manager",lambda: account_manager)
+        setattr(anylink, "get_requests_manager", lambda: requests_manager)
+
         anylink.start_website(requests_manager,account_manager)
     except KeyboardInterrupt:
         server.shutdown()

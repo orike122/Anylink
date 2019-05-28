@@ -8,14 +8,12 @@ import os
 import logging
 
 
-app = Flask(__name__,static_url_path='/static')
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app = Flask(__name__,static_url_path='/static') #Define static folder path
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0 #Define age file, in order to not save cached static files
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' #Define secret key
 
-sslify = SSLify(app,permanent=True)
+sslify = SSLify(app,permanent=True) #SSLify the original app
 
-request_manager = None
-account_manager = None
 current_paths = {}
 file_transfer_mutex = Lock()
 def get_file_transfer_mutex():
@@ -168,10 +166,7 @@ def validate_login(username,password):
 def create_user(email,passwordh):
     return get_account_manager().create_user(email,passwordh)
 
-def start_website(r_manager,a_manager):
-    global request_manager,account_manager
-    request_manager = r_manager
-    account_manager = a_manager
+def start_website():
     app.run("0.0.0.0",443,debug=False,ssl_context=('anylinknow.pem','private.pem'))
 
 def get_account_manager():
