@@ -2,14 +2,17 @@ import paramiko
 import configparser
 import base64
 class User():
+    """Deprecated"""
     def __init__(self):
+        raise DeprecationWarning("conf.User is deprecated")
         self.anonymous = False
         self.root_path = None
         self.authorixed_keys = []
 
 class Configuration():
-
+    """Deprecated"""
     def __init__(self, conffile_path):
+        raise DeprecationWarning("conf/Configuration is deprecated")
         self.conffile_path = conffile_path
         self.load()
 

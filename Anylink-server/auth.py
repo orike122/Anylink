@@ -1,22 +1,46 @@
 import base64
-
 import paramiko
 import logging
+from database import Database
+import types
+import typing
+
 class Authorization(paramiko.ServerInterface):
+    """Class for authorizing SFTP requests"""
 
-
-    def __init__(self, database, set_auth_method):
+    def __init__(self, database: Database, set_auth_method: types.FunctionType):
+        """
+        C'tor for Authorization class
+        :param database: Database object used to manage the database
+        :param set_auth_method: Function that gives authorization functionality
+        """
         self.database = database
         self.database.set_default_table("anylink")
         self._set_auth_method = set_auth_method
 
-    def get_allowed_auths(self, email):
+    def get_allowed_auths(self, email: str) -> types.Tuple:
+        """
+        Return a tuple that contains allowed auth methods
+        :param email: User's email
+        :return: a tuple that contains allowed auth methods
+        """
         return "publickey,password"
 
-    def check_auth_none(self, email):
+    def check_auth_none(self, email: str) -> int:
+        """
+        Trys to authorized with no auth
+        :param email: User's email
+        :return: paramiko's Auth code
+        """
         return paramiko.AUTH_FAILED
 
-    def check_auth_password(self, email, password):
+    def check_auth_password(self, email: str, password: str) ->int:
+        """
+        Trys to authorized with password auth
+        :param email: User's email
+        :param password: User's password hash
+        :return: paramiko's Auth code
+        """
         user = self.database.search_database(email)
         if user is not None:
             logging.info("User's email is valid: {user}".format(user=email))
@@ -31,7 +55,13 @@ class Authorization(paramiko.ServerInterface):
         self._set_auth_method(user)
         return paramiko.AUTH_SUCCESSFUL
 
-    def check_auth_publickey(self, email, key):
+    def check_auth_publickey(self, email: str, key: str) ->int:
+        """
+        Trys to authorized with publickey auth
+        :param email: User's email
+        :param key: User's key
+        :return: paramiko's Auth code
+        """
         user = self.database.search_database(email)
         if user is not None:
             auth_keys = Authorization._get_auth_keys(user)
@@ -46,7 +76,12 @@ class Authorization(paramiko.ServerInterface):
         return paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
 
     @staticmethod
-    def _get_auth_keys(user):
+    def _get_auth_keys(user: str) -> typing.List[paramiko.PKey]:
+        """
+        Returns a list of user's public keys
+        :param user: user's email
+        :return: a list of user's public keys
+        """
         authorized_keys = []
         filename = "/{email_hash}/ssh/authorized_keys".format(email_hash = user["email_hash"])
         for rawline in open(filename, 'r'):
