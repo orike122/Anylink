@@ -6,7 +6,7 @@ import logging
 from socketserver import ThreadingTCPServer
 import types
 import typing
-import io
+
 
 
 class SFTPServerInterface(paramiko.SFTPServerInterface):
@@ -83,7 +83,7 @@ class SFTPServerInterface(paramiko.SFTPServerInterface):
         fname = os.path.basename(local_path)  # extract file name
         return paramiko.SFTPAttributes.from_stat(os.lstat(local_path), fname)
 
-    def open(self, sftp_path: str, flags: int, attr: paramiko.SFTPAttributes) -> io.TextIOWrapper:
+    def open(self, sftp_path: str, flags: int, attr: paramiko.SFTPAttributes) -> paramiko.SFTPHandle:
         """
         Opens a file with given remote
         :param sftp_path: Remote path
