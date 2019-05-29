@@ -19,7 +19,7 @@ class Authorization(paramiko.ServerInterface):
         self.database.set_default_table("anylink")
         self._set_auth_method = set_auth_method
 
-    def get_allowed_auths(self, email: str) -> types.Tuple:
+    def get_allowed_auths(self, email: str) -> typing.Tuple:
         """
         Return a tuple that contains allowed auth methods
         :param email: User's email
