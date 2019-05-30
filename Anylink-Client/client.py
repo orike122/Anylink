@@ -1,7 +1,8 @@
 import paramiko
 import os
 import pickle
-import io
+import logging
+import typing
 
 """
 protocol:
@@ -23,6 +24,7 @@ Client -> Server: <<tree>>
 
 
 class Client():
+    # ----------Constants----------
     READY = "ready"
     CONFIRM_READY = "confready"
     SEND_KEY = "sendkey"
@@ -31,81 +33,98 @@ class Client():
     KEY_SENT = "keysent"
     LISTEN_PACKET_SIZE = 72
 
-    NOT_CONNECTED = 0
-    WAITING_FOR_SFTP_CONNECTION = 1
-    WAITING_FOR_CONTROL_CONNECTION = 2
-    CONNECTED = 3
-    def __init__(self,server_addr):
-        self.transport = paramiko.Transport((server_addr))
-        self.status = self.NOT_CONNECTED
+    # ----------Constants----------
+
+    def __init__(self, server_addr: typing.Tuple[str, int]):
+        """
+        C'tor for SFTP client object
+        :param server_addr: address of the server
+        """
+        self.transport = paramiko.Transport(server_addr)
+
     def start_client(self):
+        """Starts the client loop operation"""
         while True:
             self.wait_for_request()
-    def _size(self,b):
-        return len(b)*8
-    def _control_recv(self,size):
+
+
+    def _control_recv(self, size: int) -> str:
+        """
+        Preform recv from control chnannel
+        :param size: size to recv
+        :return: String data recived
+        """
         data = self.control_chan.recv(size)
         return data.decode("utf-8")
-    def connect(self,email,pkey):
-        self.status = self.WAITING_FOR_SFTP_CONNECTION
-        self.transport.connect(username=email,pkey=pkey)
+
+    def connect(self, email: str, pkey: paramiko.PKey):
+        """
+        Connect to SFTP server
+        :param email: User's email
+        :param pkey: Private key
+        """
+        self.transport.connect(username=email, pkey=pkey)
         self.sftp_client = paramiko.SFTPClient.from_transport(self.transport)
-        self.status = self.WAITING_FOR_CONTROL_CONNECTION
+
         self.control_chan = self.transport.open_session()
         self.control_chan.send(self.READY)
-        data = self._control_recv(self._size(self.CONFIRM_READY))
+
+        data = self._control_recv(len(self.CONFIRM_READY))
         if data == self.CONFIRM_READY:
-            print("connected.........")
-            self.status = 3
+            logging.debug("connected")
         else:
-            print("control connection failure.............")
-    def reopen_control(self):
-        self.control_chan = self.transport.open_session()
-        self.control_chan.send(self.READY)
-        data = self._control_recv(self._size(self.CONFIRM_READY))
-        if data == self.CONFIRM_READY:
-            print("connected.........")
-            self.status = 3
-        else:
-            print("control connection failure.............")
+            logging.debug("connection failed")
 
     def wait_for_request(self):
+        """Waits for a request from the server and than perform actions accordingly"""
         data = self._control_recv(self.LISTEN_PACKET_SIZE)
-        if data == self.SEND_KEY:
-            self.send_key()
-        elif data == self.SEND_TREE:
+
+        if data == self.SEND_TREE:
             self.send_tree()
         elif data == self.SEND_FILE:
             self.send_file()
-    def send_with_size(self,s):
-        size = str(self._size(s))
+
+    def send_with_size(self, s: str):
+        """
+        Sned's data with its size
+        :param s: Data to send
+        """
+        size = str(len(s))
         size += '.' * int((64 - len(size)))
+
         self.control_chan.send(str(size))
         self.control_chan.send(s)
 
-    def recv_with_size(self):
+    def recv_with_size(self) -> str:
+        """
+        Revc's data with its size
+        :return: Recived data
+        """
         size = self.control_chan.recv(64)
         size = size.decode('utf-8')
-        print(size)
         size = size.replace('.', '')
+
         msg = self.control_chan.recv(int(size))
-        print(msg)
+
         return msg
+
     def send_tree(self):
+        """Senss file tree to SFTP server"""
         path = self.recv_with_size()
-        print(path)
         ls = os.listdir(path)
-        dirs = [d for d in ls if os.path.isdir(os.path.join(path,d))]
-        files = [f for f in ls if os.path.isfile(os.path.join(path,f))]
-        print(dirs)
-        print(files)
-        pkl = pickle.dumps((dirs,files))
+
+        dirs = [d for d in ls if os.path.isdir(os.path.join(path, d))]
+        files = [f for f in ls if os.path.isfile(os.path.join(path, f))]
+
+        pkl = pickle.dumps((dirs, files))
         self.send_with_size(pkl)
-        print("tree sent")
+
+
+
     def send_file(self):
+        """Sends file to SFTP server"""
         path = self.recv_with_size().decode('utf-8')
-        self.sftp_client.put(path,"/"+path.split("/")[-1])
+        self.sftp_client.put(path, "/" + path.split("/")[-1])
+
         self.send_with_size("finishfile")
-        print("file sent")
-
-
+        logging.info("file sent")
