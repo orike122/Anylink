@@ -28,7 +28,7 @@ def init_registers(path):
         logging.fatal("Error while creating Anylink's registry key :(")
         raise e
 
-    key = winreg.OpenKey(reg, r'SOFTWARE\Anylink')
+    key = winreg.OpenKey(reg, r'SOFTWARE\Anylink', 0, winreg.KEY_ALL_ACCESS)
     try:
         winreg.SetValueEx(key,'key_path', 0, winreg.REG_SZ, os.path.join(path,'ssh'))
         winreg.SetValueEx(key, 'has_init', 0, winreg.REG_DWORD, 0)
@@ -42,8 +42,8 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser(description='Create program path')
     parser.add_argument('--path',metavar='<PATH>',type=str,nargs='+',help="a path for program installation")
-    args = parser.parse_args(['--path','path'])
-    path = args.path
+    args = parser.parse_args()
+    path = args.path[0]
     logging.info("Installing GUI program.....")
     err = install_gui(path)
     logging.info("Installing client.....")
