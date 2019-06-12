@@ -22,6 +22,7 @@
     "ssh-keygen": "^0.4.2"
   },
   "devDependencies": {
+    "electron" : "^5.0.2",
     "electron-packager": "^13.1.1"
   }
 }
