@@ -12,6 +12,7 @@
   "author": "Ori Keidar",
   "license": "MIT",
   "dependencies": {
+    "asar": "^2.0.1",
     "electron": "^5.0.2",
     "keypair": "^1.0.1",
     "node-forge": "^0.8.4",

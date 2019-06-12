@@ -1,9 +1,12 @@
+//imports
 const electron = require('electron');
 const regedit = require('regedit');
 const fs = require('fs');
 const path = require('path');
 const forge = require('node-forge');
 const request = require('request');
+
+//globals
 const {app,BrowserWindow,Menu,ipcMain} = electron;
 var isLoggedIn = false;
 let mainWindow;
@@ -58,6 +61,7 @@ if(process.env.NODE_ENV !== 'production'){
     );
 }
 function check_reg(callback){
+    //check registry for important values
     regedit.list(['HKCU\\SOFTWARE\\Anylink'], function(lserr,result){
         if(lserr) console.log(lserr);
         var res = result['HKCU\\SOFTWARE\\Anylink'];
@@ -67,6 +71,7 @@ function check_reg(callback){
     });
 }
 function write_user_reg(user){
+    //Write value to registry
     var val = {
         'HKCU\\SOFTWARE\\Anylink': {
             'user': {
@@ -80,6 +85,7 @@ function write_user_reg(user){
     });
 }
 function set_has_init(num){
+    //Write value to registry
     var val = {
         'HKCU\\SOFTWARE\\Anylink': {
             'has_init': {
@@ -93,17 +99,24 @@ function set_has_init(num){
     });
 }
 ipcMain.on('key:open',function(e){
+    //when event key:open
+
     if(isLoggedIn){
         check_reg(function(key_path,has_init){
             if(has_init){
                 var pub_key = fs.readFileSync(path.join(key_path,'key.pub'));
             }
             else{
+                //create key pair
                 var pair = forge.pki.rsa.generateKeyPair(2048);
                 var pub_key = forge.ssh.publicKeyToOpenSSH(pair.publicKey);
                 var pkey = forge.ssh.privateKeyToOpenSSH(pair.privateKey);
+
+                //write to file key pair
                 fs.writeFileSync(path.join(key_path,'key.pub'),pub_key);
                 fs.writeFileSync(path.join(key_path,'key'),pkey);
+
+                //change settings in registry
                 set_has_init(1);
             }
             mainWindow.webContents.send("key:expose",pub_key);
@@ -111,6 +124,9 @@ ipcMain.on('key:open',function(e){
     }
 });
 ipcMain.on('cred:submit',function(e,cred){
+    //when event cred:submit
+
+    //send's an ajax prot request
     request.post(
         {url: 'https://anylinknow.tk/validate_user',
         json:{
