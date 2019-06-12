@@ -75,6 +75,7 @@ def settings():
 def get_chan_by_id(chans,id):
     """Searches channel from a list of channels by id"""
     chan = [c for c in chans if c.get_id()==id]
+    print("................................"+str(len(chan)))
     if len(chan) == 1:
         return chan[0]
     return None
