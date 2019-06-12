@@ -4,16 +4,21 @@ import os
 import time
 
 def install_gui(path):
-    err = False
     try:
         os.mkdir(path)
         os.system(r'mv anylinkInit.exe {path}'.format(path=path))
     except EnvironmentError:
-        err = True
+        logging.fatal("Error while installin GUI :(")
+        raise e
     return err
 
 def install_client(path):
-    pass
+    try:
+        os.system(r'mv client.py {path}'.format(path=path))
+        os.system(r'mv main.py {path}'.format(path=path))
+    except EnvironmentError as e:
+        logging.fatal("Error while installin GUI :( , exiting.....")
+        raise e
 def init_registers(path):
     pass
 
@@ -25,10 +30,6 @@ if __name__ == "__main__":
     path = args.path
     logging.info("Installing GUI program.....")
     err = install_gui()
-    if err:
-        logging.fatal("Error while installin GUI :( , exiting.....")
-        time.sleep(5)
-        exit()
     logging.info("Installing client.....")
     install_client()
     logging.info("Set up registers.....")
