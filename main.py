@@ -38,7 +38,7 @@ def main():
         setattr(anylink, "get_requests_manager", lambda: requests_manager)
 
         #Start web server
-        anylink.start_website(requests_manager,account_manager)
+        anylink.start_website()
 
     except KeyboardInterrupt:
         server.shutdown()
