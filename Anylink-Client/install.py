@@ -45,9 +45,9 @@ if __name__ == "__main__":
     args = parser.parse_args(['--path','path'])
     path = args.path
     logging.info("Installing GUI program.....")
-    err = install_gui()
+    err = install_gui(path)
     logging.info("Installing client.....")
-    install_client()
+    install_client(path)
     logging.info("Set up registers.....")
-    init_registers()
+    init_registers(path)
 
