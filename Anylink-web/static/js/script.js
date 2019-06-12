@@ -1,11 +1,12 @@
+//define id as session storage
 sessionStorage.setItem("id", undefined);
+
 function set_id(new_id){
+    //Sets th new chosen id
     sessionStorage.setItem("id", new_id);
 }
-function set_client_listener(){
-    document.querySelector('')
-}
 function hashpass() {
+  //hashes the password
   var pwdObj = document.getElementById('inputpasswordh');
   var hashObj = new jsSHA("SHA-256", "TEXT", {numRounds: 1});
   hashObj.update(pwdObj.value);
@@ -16,6 +17,7 @@ function hashpass() {
 }
 
 function send_path(type,name) {
+    //Make request to web server with Ajax about file browser
     var id = sessionStorage.getItem("id");
     $.ajax({
         url: "/file_browser",
@@ -46,6 +48,7 @@ function send_path(type,name) {
     console.log('end');
 }
 function get_clients() {
+     //Make request to web server with Ajax about clients list
     $.ajax({
         url: "/get_clients",
         type: "get",
