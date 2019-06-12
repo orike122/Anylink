@@ -6,15 +6,15 @@ import winreg
 def install_gui(path):
     try:
         os.mkdir(path)
-        os.system(r'mv anylinkInit.exe {path}'.format(path=path))
+        os.system(r'move electron {path}'.format(path=path))
     except EnvironmentError as e:
         logging.fatal("Error while installin GUI :(")
         raise e
 
 def install_client(path):
     try:
-        os.system(r'mv client.py {path}'.format(path=path))
-        os.system(r'mv main.py {path}'.format(path=path))
+        os.system(r'move client.py {path}'.format(path=path))
+        os.system(r'move main.py {path}'.format(path=path))
         os.mkdir(os.path.join(path,'ssh'))
     except EnvironmentError as e:
         logging.fatal("Error while installing client :( ")
@@ -39,7 +39,7 @@ def init_registers(path):
         winreg.CloseKey(key)
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.info())
+    logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser(description='Create program path')
     parser.add_argument('--path',metavar='<PATH>',type=str,nargs='+',help="a path for program installation")
     args = parser.parse_args(['--path','path'])
