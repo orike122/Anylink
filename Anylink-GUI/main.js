@@ -6,6 +6,8 @@ const path = require('path');
 const forge = require('node-forge');
 const request = require('request');
 
+
+process.env.NODE_ENV = 'production'
 //globals
 const {app,BrowserWindow,Menu,ipcMain} = electron;
 var isLoggedIn = false;
