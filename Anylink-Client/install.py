@@ -6,15 +6,15 @@ import winreg
 def install_gui(path):
     try:
         os.mkdir(path)
-        os.system(r'move electron {path}'.format(path=path))
+        os.system(r'copy assets\electron {path}'.format(path=path))
     except EnvironmentError as e:
         logging.fatal("Error while installin GUI :(")
         raise e
 
 def install_client(path):
     try:
-        os.system(r'move client.py {path}'.format(path=path))
-        os.system(r'move main.py {path}'.format(path=path))
+        os.system(r'copy assets\client.py {path}'.format(path=path))
+        os.system(r'copy assets\main.py {path}'.format(path=path))
         os.mkdir(os.path.join(path,'ssh'))
     except EnvironmentError as e:
         logging.fatal("Error while installing client :( ")
