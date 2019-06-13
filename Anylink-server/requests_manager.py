@@ -66,6 +66,7 @@ class RequestsManager():
         data = channel.recv(5)
         data = data.decode("utf-8")
         logging.debug("Data recived: {data}".format(data=data))
+
         if data == self.READY:
             size = channel.recv(64)
             size = size.decode('utf-8')
