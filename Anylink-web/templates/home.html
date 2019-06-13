@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="static/css/theme.css" type="text/css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.0.2/sha.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="static/js/script.js?123"></script>
+
+  <script> function checkScroll(){
+    	var startY = 0; //The point where the navbar changes in px
+      if($(window).scrollTop() > startY){
+        $('#fixednav').addClass("scrolled");
+      }else{
+        $('#fixednav').removeClass("scrolled");
+      }
+  	}
+  </script>
+  <script>
+    var auto_refresh = setInterval(function() {get_clients()}, 1000);
+  </script>
+</head>
+
+<body class="bg-light" style="	background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));	background-position: top left;	background-size: 100%;	background-repeat: repeat;">
+  <script>
+    $(document).ready(function() {
+      console.log($.ajax);
+    });
+  </script>
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light sticky-top" id="fixednav" style="">
+    <div class="container"> <button class="navbar-toggler navbar-toggler-right border-0 p-0" type="button" data-toggle="collapse" data-target="#navbar20">
+        <p class="navbar-brand text-white mb-0">
+          <i class="fa d-inline fa-lg fa-stop-circle"></i> BRAND </p>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar20">
+        <ul class="navbar-nav col">
+          <li class="nav-item"> <a class="nav-link text-white" href="/">Home</a> </li>
+          <li class="nav-item"> <a class="nav-link text-white" href="/settings">Settings</a> </li>
+          <li class="nav-item"> <a class="nav-link text-white" href="#">About</a> </li>
+        </ul>
+        <p class="d-none d-md-block lead text-white col mb-0 text-center" style=""> <i class="fa d-inline fa-lg fa-link"></i> <b>Anylink</b> </p>
+        <ul class="navbar-nav col justify-content-end px-0">
+          <li class="nav-item mr-0 ml-4 text-primary"><a class="nav-link text-white" href="/logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="py-5" style="">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card text-center">
+            <div class="list-group" id="devs"></div>
+          </div>
+        </div>
+        <ul class="col-md-6">
+          <div class="list-group" id="file_browser">
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12"></div>
+
+      </div>
+    </div>
+  </div>
+  <div class="py-5" style="">
+    <div class="container">
+      <div class="row"></div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script>
+    $(function() {
+      if ($('#fixednav').length > 0) {
+        $(window).on("scroll load resize", function() {
+          checkScroll();
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
