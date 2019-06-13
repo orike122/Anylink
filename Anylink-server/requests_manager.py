@@ -50,7 +50,7 @@ class RequestsManager():
         Accepts waiting for connection user clients
         :param user:
         """
-        for trans, email in self.transports.items():
+        for trans, email in list(self.transports.items()):
             if email == user:
                 channel = trans.accept(timeout=1)
                 if channel is not None:
