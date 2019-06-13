@@ -63,7 +63,7 @@ class RequestsManager():
         :param channel: SSH Channel object
         :param email: user's email
         """
-        data = channel.recv(40)
+        data = channel.recv(5)
         data = data.decode("utf-8")
         logging.debug("Data recived: {data}".format(data=data))
         if data == self.READY:
