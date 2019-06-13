@@ -1,0 +1,28 @@
+{
+  "name": "anylink-gui",
+  "version": "1.0.0",
+  "description": "Anylink User Program for Desktop",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package-win": "electron-packager . Anylink-release --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Anylink\""
+  },
+  "keywords": [
+    "Anylink"
+  ],
+  "author": "Ori Keidar",
+  "license": "MIT",
+  "dependencies": {
+    "asar": "^2.0.1",
+    "electron": "^5.0.2",
+    "keypair": "^1.0.1",
+    "node-forge": "^0.8.4",
+    "regedit": "^3.0.2",
+    "request": "^2.88.0",
+    "ssh-keygen": "^0.4.2"
+  },
+  "devDependencies": {
+    "electron" : "^5.0.2",
+    "electron-packager": "^13.1.1"
+  }
+}

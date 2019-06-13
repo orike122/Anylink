@@ -1,0 +1,20 @@
+
+<div class="row">
+    <div class="col s12">
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea id="pub_key" rows="5" class="materialize-textarea"></textarea>
+                <label for="pub_key">Public Key</label>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var key_textarea = document.querySelector("#pub_key");
+    ipcRenderer.on('key:expose', function(e,key){
+        var key_text = document.createTextNode(key);
+        key_textarea.innerHTML = '';
+        key_textarea.appendChild(key_text);
+        M.textareaAutoResize($('#pub_key'));
+    });
+</script>
