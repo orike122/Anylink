@@ -74,9 +74,9 @@ def settings():
 
 def get_chan_by_id(chans,id):
     """Searches channel from a list of channels by id"""
-    chan = [c for c in chans if c.get_id()==id]
+    chan = [c for c in chans if c.get_name()==id]
     for c in chan:
-        logging.debug("id: {id}".format(id=c.get_id()))
+        logging.debug("id: {id}".format(id=c.get_name()))
     print("................................"+str(len(chan)))
     if len(chan) == 1:
         return chan[0]
@@ -89,7 +89,7 @@ def file_browser():
     chans = get_requests_manager().get_user_channels(session['user'])
     req = request.args.get('jsdata')
     tp,name,id = req.split(',')
-    id = int(id)
+    id = id
     chan = get_chan_by_id(chans,id)
     if 'current_client' not in session or session['current_client'] is None:
         session['current_client'] = id

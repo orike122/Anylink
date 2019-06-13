@@ -53,6 +53,7 @@ class RequestsManager():
         for trans, email in self.transports.items():
             if email == user:
                 channel = trans.accept(timeout=1)
+                channel.set_name(str(self.handler_class.count))
                 if channel is not None:
                     self._initiate_channel(channel, email)
 

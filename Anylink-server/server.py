@@ -28,7 +28,7 @@ class SFTPHandler(socketserver.BaseRequestHandler):
     """Handler class for Anylink Server connections"""
     TIMEOUT = 120  # timeout for request
     users = {}  # dict of transport user
-
+    count = 0
     def setup(self):
         """Override of setup function"""
         self.transport = self.make_transport(self.request)
@@ -47,11 +47,14 @@ class SFTPHandler(socketserver.BaseRequestHandler):
         if channel is None:
             logging.info("connection faild :(")
             raise Exception("session channel not opened (auth failed?)")
+
+        SFTPHandler.count += 1
         self.transport.join()
 
     def finish(self):
         """Override of finish function"""
         del SFTPHandler.users[self.transport]
+        SFTPHandler.count -= 1
 
     def _set_auth_user(self, user: dict):
         """
