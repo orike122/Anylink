@@ -23,9 +23,11 @@ Extract the files into a folder and you should see something like that:
 ```
 Then run install.py like this
 ```
-py -3 install.py --path <PATH>
+py -3 install.py --path PATH
 ```
-<PATH> specifies the installation directory path, remeber this path we'll access this directory later.
+PATH specifies the installation directory path, remeber this path we'll access this directory later.
+<br\>
+<br\>
 The installation should take a few minutes. The installer will install deps run the configuration program for you.
 ### Configuring
 After the program opens, you will need to open th login tab, and log in to your anylink account. If you have not created an account yet, 
