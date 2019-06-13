@@ -71,7 +71,7 @@ class RequestsManager():
             size = size.decode('utf-8')
             size = size.replace('.', '')
             name = channel.recv(int(size))
-            setattr(channel,"anylink_name",name)
+            setattr(channel,"anylink_name",name.decode('utf-8'))
             channel.send(self.CONFIRM_READY)
             self.channels[channel] = email
         else:
