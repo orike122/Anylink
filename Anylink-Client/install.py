@@ -38,6 +38,12 @@ def init_registers(path):
     finally:
         winreg.CloseKey(key)
 
+def install_app(path):
+    os.chdir(path)
+    os.system('npm install')
+
+def start_app(path):
+    os.system('npm start')
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser(description='Create program path')
@@ -50,4 +56,8 @@ if __name__ == "__main__":
     install_client(path)
     logging.info("Set up registers.....")
     init_registers(path)
+    logging.info("Installing app.....")
+    install_app(path)
+    logging.info("Start up app.....")
+    start_app(path)
 
