@@ -5,10 +5,10 @@ Let's begin with the installation.
 ### prerequisites
 - node.js
 - python 3.7
-- paramiko
+- paramiko 2.4.2(not 2.5.0!)
 You can install paramiko with:
 ```
-py -3 -m pip install paramiko
+py -3 -m pip install paramiko=2.4.2
 ```
 ### Installation
 First we will download the zip file of the latest release under releases tab.
