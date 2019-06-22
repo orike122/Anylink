@@ -3,6 +3,7 @@ import os
 import pickle
 import logging
 import typing
+import socket
 
 """
 protocol:
@@ -68,7 +69,8 @@ class Client():
 
         self.control_chan = self.transport.open_session()
         self.control_chan.send(self.READY)
-
+        name = socket.gethostbyname(socket.gethostname()) + " - " + socket.gethostname()
+        self.send_with_size(name)
         data = self._control_recv(len(self.CONFIRM_READY))
         if data == self.CONFIRM_READY:
             logging.debug("connected")
