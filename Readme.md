@@ -8,7 +8,7 @@ Let's begin with the installation.
 - paramiko 2.4.2(not 2.5.0!)
 You can install paramiko with:
 ```
-py -3 -m pip install paramiko=2.4.2
+py -3 -m pip install paramiko==2.4.2
 ```
 ### Installation
 First we will download the zip file of the latest release under releases tab.
