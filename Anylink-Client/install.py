@@ -13,6 +13,7 @@ def install_gui(path):
 
 def install_client(path):
     try:
+        os.system(r'py -3 -m pip install -r assets\requirements.txt')
         os.system(r'copy assets\client.py {path}'.format(path=path))
         os.system(r'copy assets\main.py {path}'.format(path=path))
         os.mkdir(os.path.join(path,'ssh'))
