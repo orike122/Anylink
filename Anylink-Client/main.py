@@ -8,7 +8,7 @@ import os
 def main():
     # define addr
     ip = "anylinknow.tk"
-    port = 8822
+    port = 9047
 
     client = Client((ip, port))
 
