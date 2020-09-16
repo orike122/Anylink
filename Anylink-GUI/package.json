@@ -16,7 +16,7 @@
     "asar": "^2.0.1",
     "electron": "^5.0.2",
     "keypair": "^1.0.1",
-    "node-forge": "^0.8.4",
+    "node-forge": "^0.10.0",
     "regedit": "^3.0.2",
     "request": "^2.88.0",
     "ssh-keygen": "^0.4.2"
